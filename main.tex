@@ -1,0 +1,157 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{algpseudocode}
+\algnewcommand{\Initialize}[1]{%
+  \State \textbf{Initialize:}
+  \Statefx \hspace*{\algorithmicindent}\parbox[t]{.8\linewidth}{\raggedright #1}
+}
+
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{enumerate}
+
+\usepackage{concmath}
+\pdfpkmode{supre} \pdfpkresolution=2400
+
+\def\oldstylenums#1{%
+\begingroup
+\spaceskip\fontdimen\tw@\font
+\usefont{OML}{ccm}{\f@series}{it}%
+\mathgroup\symletters #1%
+\endgroup}
+
+\title{\textbf{Advanced Machine  Learning}\\Series 1}
+\author{Erik Koene}
+\date{October 2018}
+
+\begin{document}
+
+\maketitle
+
+\section{Regression}
+\subsection{Linear Regression}
+\begin{enumerate}[(a)]
+    \item The residual sum of squares error $\varepsilon\in\mathbb{R}$ for the given problem is:
+    \begin{equation}
+        \varepsilon = \sum_{i=1}^n\left[\left( \hat{y}_i - \sum_{j=1}^d x_{ij}\beta_j \right)^2\right],\quad \text{ or }\quad \varepsilon = \left(\hat{\mathbf{y}}-\mathbf{X}\beta\right)^T\left(\hat{\mathbf{y}}-\mathbf{X}\beta\right). \label{eq:lserror}
+    \end{equation}
+    It corresponds to the squared $L^2$ norm of residual vector $\mathbf{r}=\hat{\mathbf{y}}-\mathbf{X}\beta$, s.t. $\varepsilon=\norm{\mathbf{r}}_2^2$.
+    \item The optimal $\hat{\beta}$ follows from minimization of Eq. \eqref{eq:lserror} through setting its derivative w.r.t. $\beta$ to 0:
+    \begin{align}
+        \varepsilon & = \left(\hat{\mathbf{y}}-\mathbf{X}\beta\right)^T\left(\hat{\mathbf{y}}-\mathbf{X}\beta\right),\\
+                    & = \hat{\mathbf{y}}^T\hat{\mathbf{y}} - \hat{\mathbf{y}}^T\mathbf{X}\beta - (\mathbf{X}\beta)^T\hat{\mathbf{y}} + (\mathbf{X}\beta)^T\mathbf{X}\beta,\\
+                    & = \hat{\mathbf{y}}^T\hat{\mathbf{y}} - 2 (\mathbf{X}\beta)^T\hat{\mathbf{y}} + \beta^T\mathbf{X}^T\mathbf{X}\beta,\\
+                \to \frac{\partial \varepsilon}{\partial \beta} & =  2(\mathbf{X}^T\mathbf{X}\beta - \mathbf{X}^T\hat{\mathbf{y}}),\\
+                &= 0 \Longleftrightarrow \hat{\beta}  = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}\hat{\mathbf{y}}. 
+    \end{align}
+\end{enumerate}
+\subsection{Ridge Regression (regularized inversion)}
+\begin{enumerate}[(a)]
+    \item The error function $\varepsilon\in\mathbb{R}$ is now defined in terms of two $L^2$ norms in series:
+    \begin{equation}
+        \varepsilon=\norm{\hat{\mathbf{y}}-\mathbf{X}\beta}_2^2 + \lambda\norm{\beta}_2^2,
+    \end{equation}
+    The effect of this step is that we can regularize models which were under- or overdetermined, and therefore hard to invert. Furthermore, it gives preference to solutions with the least energy, i.e., the solution $\beta$ that is $L^2$ optimal. The design parameter $\lambda$ is a degree of freedom that sets the amount of regularization in the cost-function: from none ($\lambda=0$) to an all-encompassing force that pushes $\beta\to\mathbf{0}$.
+    \item The optimal $\hat{\beta}$ is found with the same procedure as in 1.1(b):
+    \begin{align}
+        \varepsilon & = \hat{\mathbf{y}}^T\hat{\mathbf{y}} - 2 (\mathbf{X}\beta)^T\hat{\mathbf{y}} + \beta^T\mathbf{X}^T\mathbf{X}\beta + \lambda\beta^t\beta,\\
+        \to \frac{\partial\varepsilon}{\partial\beta} & = 2(\mathbf{X}^T\mathbf{X}\beta - \mathbf{X}^T\hat{\mathbf{y}}+\mathbf{I}\lambda\beta),\\
+        & = 0 \Longleftrightarrow \hat{\beta} = (\mathbf{X}^T\mathbf{X}+\mathbf{I}\lambda)^{-1}\mathbf{X}\hat{\mathbf{y}},
+    \end{align}
+    where $\mathbf{I}$ represents the identity matrix.
+    \item The eigenvalues of $\mathbf{S}=\mathbf{X}^T\mathbf{X}$ need to be distinct and non-zero for $\mathbf{S}^{-1}$ to exist, such that the rank of $\mathbf{S}$ is of same size as the dimension of $\hat{\mathbf{y}}$. 
+    \item The Ridge Regression, for `suitably large' $\lambda$, can make the matrix $(\mathbf{X}^T\mathbf{X}+\mathbf{I}\lambda)$ full-rank, by populating the entire diagonal part of the matrix. As the matrix becomes full-rank, it becomes invertible in a stable manner. In other words, it can turn a problem that is not invertible (1.2(c)) into an invertible problem.
+\end{enumerate}
+
+\section{Comprehension Questions}
+\subsection{Overfitting}
+\begin{enumerate}[(i)]
+    \item \begin{enumerate}[(a)]
+        \item The network is \textbf{underfitting}: the loss function remains high, suggesting that the model cannot explain the variance well, and does so evenly `poor' on the training and validation data.
+        \item The loss function has converged to an asymptote that is not very good, meaning that the predictive power of the trained model is still poor. It should use  a more complicated model (e.g., more neurons or layers) to allow a better fit to the underlying structure of the data.
+    \end{enumerate} 
+    \item \begin{enumerate}[(a)]
+        \item The network is \textbf{overfitting} after a number of epochs, as the performance on the training data is clearly better than that on the validation data set. The model is thus clearly biased towards the training data, and does not generalize well outside the training data set.
+        \item The training could be stopped after a limited number of epochs, or the neural network should be modified to again enforce a simultaneous decrease of loss functions for both training and validation data.
+    \end{enumerate}
+    \item \begin{enumerate}[(a)]
+        \item The network is \textbf{reasonable}, as the model trained on the training data predicts the validation data equally well; and furthermore decreases to a tiny loss function (that hasn't even converged yet), suggesting that the model explains the variance rather well.
+        \item It could be trained longer, to improve the fit.
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Cross-validation}
+\begin{enumerate}[(a)]
+    \item The \textbf{training set} are the data that the model is trained on. The \textbf{validation set} are the data that the predictive power of the model is tested against, because it is an unbiased additional data-set which can be used, for example, to check if the trained model is under- or overfitting. The \textbf{test set} are the data to check the final performance of the model against.
+    \item K-fold cross-validation builds $K$ solutions by partitioning the data into $K$ equally sized groups. Then for every model, the $K$-th subset of data is used as validation data while the remaining data forms the training data-set. The method should give insight into the `generalizability' of the model, i.e., how well does it perform on data not used for training. One can average the sum of the $K$ risk (cost) functions as an approximation of the real, unbiased risk function.
+    \item For $K=n$, we would leave out one sample every time to validate the data on, which is a valid decimation strategy, but requires a lot of computational power. For $K=1$, conversely, nothing happens: depending on your choice you're left with either no training data or no validation data. Online it was stated that $K\in (5,\dots,10)$ is a standard use, but there is no clear heuristic available to make a choice.
+\end{enumerate}
+
+\subsection{Generative vs. Discriminative Modeling}
+\begin{enumerate}[(a)]
+    \item \textbf{Generative modeling} approximates the joint probability $\mathbb{P}(x\cap y)$, i.e., a frequentist approach. \textbf{Discriminative modeling} approximates $\mathbb{P}(y|x)$, i.e., a Bayesian approach. The latter is harder to estimate. Nonetheless, one can compute $\mathbb{P}(y|x)=\mathbb{P}(x\cap y)/\mathbb{P}(x)$, such that these probabilities are attainable with generative modeling.
+    \item The decision boundary for the \textbf{generative model} is a soft boundary, weighting the probability of points to fall within a distribution. The decision boundary for the \textbf{discriminative model}, conversely, learns where to draw the boundary to separate points. The decision boundary is thus integral in the approach. Outliers are more likely to be taken care of by generative models, which can apply low weights to outliers. Discriminative models cannot inherently make this distinction.
+    \item Not sure about the influence of model specification on the error. But discriminative modeling for only a little bit of data risks overfitting, picking up spurious patterns that are not there. Generative modeling has less of this risk. I am also not sure which method to prefer. 
+\end{enumerate}
+
+\section{EM-Algorithm for Gaussian Mixtures}
+\begin{enumerate}[(1)]
+    \item The the probability of a point $x_i$ given the $c$-th Gaussian component parameterized by $\theta$ equals:
+    \begin{equation}
+        \mathbb{P}(x_i,c|\theta) = \pi_c \mathcal{N}(x_i,c|\mu_c,\sigma_c).
+    \end{equation}
+    The probability of datum $x_i$ in the total model is then a weighted sum over all components $c$:
+    \begin{equation}
+        \mathbb{P}(x_i|\theta) = \sum_{c=1}^k\pi_c  \mathcal{N}(x_i,c|\theta).
+    \end{equation}
+    \item Because all the samples are drawn iid, we know that the probability of the entire data-set is:
+    \begin{equation}
+        \mathbb{P}(\mathcal{X}|\theta) = \prod_{i=1}^n \mathbb{P}(x_i|\theta).
+    \end{equation}
+    The log-likelihood is is then expressed as the log of this product:
+    \begin{equation}
+        L(\mathcal{X}|\theta) = \log(\mathbb{P}(\mathcal{X}|\theta)) = \log\prod_{i=1}^n \mathbb{P}(x_i|\theta) = \sum_{i=1}^n\log \mathbb{P}(x_i|\theta).
+    \end{equation}
+    \item We use the indicator function $M_{ic}$ for which:
+    \begin{equation}
+        M_{ic}=\begin{cases} 1 & \text{if }x_i\text{ generated by }c, \\ 0 & \text{otherwise}. \end{cases}
+    \end{equation}
+    We write down the joint probability with the distributive rule (seeing in Question 4 that we are interested in probabilities of the form $(M|\mathcal{X},\theta)$):
+    \begin{equation}
+        \mathbb{P}(\mathcal{X},M|\theta) = \mathbb{P}(M|
+        \mathcal{X},\theta)\mathbb{P}(\mathcal{X}|\theta).
+    \end{equation}
+    Using this identity in the log-likelihood function provides:
+    \begin{align}
+        L(\mathcal{X},M|\theta) &= \log\left[ \mathbb{P}(M|
+        \mathcal{X},\theta)\mathbb{P}(\mathcal{X}|\theta)\right],\\
+        & = \log\left[ \mathbb{P}(M|
+        \mathcal{X},\theta) \right] + \log\left[ \mathbb{P}(\mathcal{X}|\theta) \right],\\
+        & = \log\left[ \mathbb{P}(M|
+        \mathcal{X},\theta) \right] + \left[\sum_{i=1}^n\log( \mathbb{P}(x_i|\theta) \right]
+    \end{align}
+    \item We are given an identity:
+    \begin{equation}
+        \mathbb{E}_{M_{ic}|\mathcal{X},\theta}(M_{ic}) = \sum_{M} M_{ic}\mathbb{P}(M_{ic}|\mathcal{X},\theta) = \mathbb{P}(M_{ic}|\mathcal{X},\theta) = \gamma_{ic},
+    \end{equation}
+    and I will use Jensen's inequality in the form:
+    \begin{equation}
+        \mathbb{E}(\log(a))\geq \log\mathbb{E}(a).
+    \end{equation}
+    
+    We then commence by computing:
+    \begin{align}
+        Q(\theta)=\mathbb{E}_{M|\mathcal{X},\theta}\left[L(\mathcal{X},M|\theta)\right] &= \sum_{c=1}^k L(\mathcal{X},M_{c}|\theta) \mathbb{P}(M_c|\mathcal{X},\theta),\\
+        &=\sum_{c=1}^k\sum_{i=1}^n\left(\log\left[ \mathbb{P}(M_{ic}|
+        x_i,\theta) \right]\mathbb{P}(M_{ic}|x_i,\theta) + \left[\log( \mathbb{P}(x_i|\theta) \right] \mathbb{P}(M_{ic}|x_i,\theta)\right), \\
+        &=\log\left[\mathbb{P}(M)\right] + \sum_{c=1}^k\sum_{i=1}^n\log\left[ \pi_c  \mathcal{N}(x_i|\theta)\right]  \mathbb{P}(M_{ic}|\mathcal{X},\theta),\\
+        &=\log\left[\gamma_{ic}\right] + 
+    \end{align}
+    ...?
+\end{enumerate}
+
+\end{document}
