@@ -95,7 +95,7 @@
 
 \setcounter{section}{-2}
 \section{The historical setting of statistical learning theory}
-This section, starting of at minus 1, is mostly based on \textsc{Vladimir Vapnik}'s \textit{The Nature of Statistical Learning -- for Engineering and Information Science} (1995) and more thorough \textit{Statistical Learning Theory} (1998). I think that the background information is rather interesting to set up the topic.
+This section, starting of at minus 1, is mostly based on \textsc{Vladimir Vapnik}'s \textit{The Nature of Statistical Learning -- for Engineering and Information Science} (1995) and more thorough \textit{Statistical Learning Theory} (1998). This background information is interesting to set up the topic.
 
 \subsection{Parametric inference, 1920s--1960s}
 By the 1920s, descriptive statistics was mostly complete: statistical laws (distribution functions) were found to describe various events of reality well. The next topic was that of \textbf{statistical inference}: when given a collection of empirical data origination from some functional dependency, infer this dependency. The two main approaches to this issue were the following:
@@ -106,39 +106,37 @@ By the 1920s, descriptive statistics was mostly complete: statistical laws (dist
 The first approach (parametric inference) to inductive inference had its ``golden age'' between the 1930s and 1960s, in the time before computers, when simple methods were the only realizable option. The philosophy of the parametric approach assumed that:
 \begin{enumerate}
     \item \textit{A set of functions, linear and minimal in their parameters, contains a good approximation to the desired function},
-    \item \textit{The statistical law underlying the stochastic component of most real-life problems is the normal law}
-    \item \textit{The maximum likelihood method is a good tool for estimating the parameters}
+    \item \textit{The statistical law underlying the stochastic component of most real-life problems is the normal law},
+    \item \textit{The maximum likelihood method is a good tool for estimating the parameters}.
 \end{enumerate}
 However the wide avialability of computers in the 60s showed that all three beliefs had shortcomings:
 \begin{enumerate}
-    \item In realistic multidimensional problems with dozens or even hundreds of variables, the belief that one can define a reasonably small set of functions that contains a good approximation to a desired one looks naive, also through the `curse of dimensionality' (\textsc{R. Bellman}).
+    \item In realistic multidimensional problems with dozens or even hundreds of variables, the belief that one can define a reasonably small set of functions that contains a good approximation to a desired one is wrong, also through the `curse of dimensionality' (\textsc{R. Bellman}).
     \item Additionally, \textsc{Tukey} found that real-life data often differs from classical statistical distribution functions, and one must take this into account to construct effective algorithms.
     \item \textsc{James} and \textsc{Stein} showed that even for simple problems of density estimation, such as finding the mean of a $n>2$-dimensional Gaussian with unit covariance, the maximum likelihood method is not the best one. The estimator they suggest is uniformly better than the maximum likelihood estimator!
 \end{enumerate}
 Thus, the beliefs upon which parametric inductive inference was based turn out to be inappropriate for many real-life problems, opening the door for other methods of statistical inference.
 
 \subsection{Inductive inference, 1970s--2000s}
-\textsc{Rosenblatt} introduced a computer program in 1958, based on a neurophysiological learning model called the Perceptron, which happened to generalize well to classification problems. Consequently, \textsc{Novikov} proved a series of theorems about the Perceptron, particularly that it will converge to a working solution (separation boundary) in a finite number of iterations. (As a side-note, \textsc{Minsky \& Papert} released a book called `Perceptrons' in 1969 that showed fundamental limitations of perceptrons in solving problems that are trivial to humans. This negative outlook led to a decline in interest in AI called the `AI winter' -- computers can't do \textit{logic}. However, from the ashes came machine learning, which tries to do much smaller tasks and side-step questions of logic, but now based on \textbf{statistics and optimization}.) Thus arose the question \textit{how, and under which constraints, can we generalize algorithms that are agnostic to the underlying probability density function}? And so, \textbf{statistical learning theory} is born!
+\textsc{Rosenblatt} introduced a computer program in 1958, based on a neurophysiological learning model called the Perceptron, which happened to generalize well to classification problems. Consequently, \textsc{Novikov} proved a series of theorems about the Perceptron, particularly that it will converge to a solution in a finite number of iterations. (As a side-note, \textsc{Minsky \& Papert} released a book called `Perceptrons' in 1969 that proved that these neurons couldn't solve some very simple problems. This negative outlook led to a decline in interest in AI called the `AI winter' -- computers can't do \textit{logic}. However, from the ashes came `machine learning', which tries to do much smaller, humbler, tasks and side-step questions of logic, and is based on \textbf{statistics and optimization}.) Thus arose the question \textit{how, and under which constraints, can we generalize algorithms that are agnostic to the underlying probability density function}? And so, \textbf{statistical learning theory} is born!
 
-A mathematical answer to this question was found through the idea of \textit{empirical risk minimization} (ERM): To achieve good generalization on future (test) examples, the ERM principle suggests a decision rule based on a loss function that minimizes the number of training errors (empirical risk). This ERM principle generalizes to least squares when we choose a quadratic loss-function, or to the maximum likelihood method when we choose a logarithmic loss-function.
+The fundamental answer in statistical learning theory was found through \textit{empirical risk minimization} (ERM): to generalize well to new data, we must minimize a specific \textit{loss function} for our training data. The ERM principle yields the maximum likelihood method when we choose a logarithmic loss, but generalizes to many more varied decision rules! Machine learning is now similar to an optimization procedure, but requires you to choose the right optimization strategy!
 
-While algorithmic advances went slow (it took until 1986 before the back-propagation technique for neural networks was discovered by \textsc{LeCun}), much more progress was attained in theoretical advances. Work from \textsc{Vapnik} and \textsc{Chervonenkis} characterized the generalization error of the model when trained on a small sample sizes, for both classification problems and regression estimation.
-
-A particular finding was that we are often interested in values of an unknown function at \textit{a limited number} of points of interest only. The parametric paradigm uses a two-stage procedure that is called \textbf{generative modeling}: At the first (induction) stage we estimate the probability density function using an induction principle, while at the second (deduction) stage we use this function to evaluate the values of the unknown function at the points of interest. At the first step we thus solve a problem that is more general than the one we need to solve, for it estimates the \textit{entire} unknown function for \textit{all} points of the domain. This is sometimes impossible to do well, and furthermore quite expensive. When we only want to estimate the values of a function at a few points of interest, with a furthermore restricted amount of information, it is possible to estimate the unknown function (conditional probability) in one immediate step -- which we call \textbf{discriminative modeling}.
+While algorithmic advances went slow (it took until 1986 before the back-propagation technique for neural networks was discovered by \textsc{LeCun}), much more progress was attained in theoretical advances. \textsc{Vapnik} and \textsc{Chervonenkis} developed the ERM theory to obtain minimal generalization error with only limited data. A particular insight was that we can simplify things when we want to predict values only in a \textit{limited} range. The old parametric paradigm uses a two-stage procedure that is called \textbf{generative modeling}: at the first (induction) stage we estimate the probability density function, at the second (deduction) stage we use this function to compute values at new points of interest. The first step thus solves a problem that is more general than the one required, for it estimates the \textit{entire} unknown function for \textit{all} points on the domain. This is expensive and difficult to do well. When we only want to estimate the values of a function at a few points of interest, with a restricted amount of information, it is possible to estimate the unknown function in one immediate (transduction) step: \textbf{discriminative modeling}.
 
 \subsection{Neural networks, 2010s--present}
-
+Then, with the rise of `big data' and very powerful computers, multilayer perceptrons (or `neural networks') started to outperform other methods developed with the ERM principle, and win many machine learning competitions! However, the methods require a lot of `fiddling the knobs' to obtain good results, and the statistical community is playing catch-up to understand how to make the neural nets learn optimally and stably.
 
 \newpage
 
-\section{Informal setting -- prerequisites}
+\section{Prerequisites (informal introduction)}
 \subsection{Probability}
 We define $\mathbb{P}(A)$ as the probability of event $A$ to be measured from the set of \textit{all} possible outcomes, mapping to a number within $[0,1]$. We define $\mathbb{P}(A\cap B)=\mathbb{P}(A,B)$ as the probability of the set intersection (the common elements in $A$ and $B$). Notably, for every event $A$ there is the complement of $A^c$ for which we have:
 \begin{align}
     \mathbb{P}(A\cap A^c)=\mathbb{P}(\varnothing)&=0,&
     \mathbb{P}(A) + \mathbb{P}(A^c)&=1.
 \end{align}
-When probabilities are \textit{indepedent} (the outcome of one event doesn't influence the likelihood of another event; they happen in arbitrary order), it is implied that $\mathbb{P}(A,B)=\mathbb{P}(A)\mathbb{P}(B)$.
+When probabilities are \textit{\textbf{indepedent}} (the outcome of one event doesn't influence the likelihood of another event; they happen in arbitrary order), it is implied that $\mathbb{P}(A,B)=\mathbb{P}(A)\mathbb{P}(B)$.
 \begin{testexample}[Throwing dice, part 1]
     We'll roll two dice, and consider event $A$ to represent that the first throw is $i\in\{1,2,3,4\}$ and the second throw is $j\in\{4,5,6\}$. Event $B$ is an outcome where the two dice sum to the number 7. The valid \textit{sample space} of $A$ and $B$ is here tabulated in {\color{gray} gray}:
     
@@ -204,7 +202,7 @@ $B|A$ & & \multicolumn{3}{c}{$j$} \\
   & 4 & 8 & 9 & 10 \\ \bottomrule
 \end{tabular}
 \end{center}
-The valid sample space of $B$ now represents only 3 out of the 12 potential outcomes of our two dice throws that lead to state $A$: $1/4$th of the table. We can find the same result in a general way using our previously found probabilities and the conditional probability rule:
+The valid sample space of $B$, given $A$, is now reduced, and $1/4$-th of its possible outcomes now generate event $B$! We can find the same result in a general way using our previously found probabilities and the conditional probability rule:
 \begin{equation}
     \mathbb{P}(B|A)=\frac{\mathbb{P}(A,B)}{\mathbb{P}(A)}=\frac{\dfrac{1}{12} }{\dfrac{1}{3} }=\frac{3}{12}=\frac{1}{4}.
 \end{equation}
@@ -236,9 +234,9 @@ As seen in the previous section, this may also be written in terms of conditiona
 \end{equation}
 It is thus a \textit{weighted average} of the conditional probabilities.
 \begin{testexample}[Buying light bulbs]
-    Assume that factory $X$ produces 60\% of all light bulbs, which work over 5000 hours in 99\% of the cases, while factory $Y$ produces 40\% of all light bulbs, which work over 5000 hours in 95\% of the cases. The chance that a purchased light-bulb works at least 5000 hours:
+    Assume that factory $X$ produces 60\% of all light bulbs, which work over 5000 hours in 99\% of the cases, while factory $Y$ produces 40\% of all light bulbs, which work over 5000 hours in 95\% of the cases. The chance that a purchased light-bulb works at least 5000 hours is then:
     \begin{equation}
-        \mathbb{P}(A) = \mathbb{P}(A|B_x)\mathbb{P}(B_x) + \mathbb{P}(A|B_y)\mathbb{P}(B_y) = \frac{99}{100}\frac{60}{100} + \frac{95}{100}\frac{40}{100} = 97.4\%.
+        \mathbb{P}(\text{works}) = \mathbb{P}(\text{works}|F_X)\mathbb{P}(F_X) + \mathbb{P}(\text{works}|F_Y)\mathbb{P}(F_Y) = \frac{99}{100}\frac{60}{100} + \frac{95}{100}\frac{40}{100} = 97.4\%.
     \end{equation}
     Indeed, the marginal probability is a weighted average of the conditional probabilities.
 \end{testexample}
@@ -312,7 +310,7 @@ We define an indicator function $\mathbb{I}_{X=x}$, which is 1 when the statemen
     \begin{equation}
         \mathbb{P}(i,j|A) = \frac{ \mathbb{P}(A|i,j)\mathbb{P}(i,j)}{\mathbb{P}(A)}.
     \end{equation}
-    The prior is the uniform distribution we have seen before, $\mathbb{P}(i,j)=\mathbb{P}(i)\mathbb{P}(j)$. The likelihood is expressed with an indicator function $\mathbb{P}(A|i,j)=\mathbb{I}_{i+j=9}$; after the two dice are rolled and known, they either sum to 9 or not! These two results are expressed in tabular form as:
+    The prior is the uniform distribution we have seen before, $\mathbb{P}(i,j)=\mathbb{P}(i)\mathbb{P}(j)$. The likelihood is expressed with an indicator function $\mathbb{P}(A|i,j)=\mathbb{I}_{i+j=9}$: after the two dice are rolled and known, they either sum to 9 or not! These two results are expressed in tabular form as:
     \begin{center}
     \hfill
 \begin{tabular}{@{}lr|llllll}
@@ -371,7 +369,7 @@ We define an indicator function $\mathbb{I}_{X=x}$, which is 1 when the statemen
  & 6 & 0$\hphantom{\frac{1}{2}}$ & 0$\hphantom{\frac{1}{2}}$ &  $^{1\!}/_{\! 4}$ & 0 & 0 & 0 \\ \bottomrule
 \end{tabular}
     \end{center}
-    The posterior now says: if we know that the dice sum to 9, it comes from those 4 combinations which would lead to that sum, all with equal probability.
+    The posterior now says: if we know that the dice sum to 9, we are certain we threw either $(3,6)$, $(4,5)$, $(5,4)$ or $(6,3)$; all with equal probability of 25\%. No other outcome is possible!
 \end{testexample}
 
 
@@ -448,7 +446,7 @@ We can now easily compute probabilities as $\mathbb{P}(X\geq 1)=p_X(1)+p_X(2)+p_
     \begin{align}
         p_X(0)&=1-p,& p_X(1)&=p.
     \end{align}
-    \item \textbf{Binomial distribution}: counts the sum of successes of $n$ repeated Bernoulli experiments (a survey of yes/no answers, and then counting all the 'yes'es; or also $\mathbb{P}(X=x)$ in the example above for $n=4$, $p=\frac{1}{2}$ and $k\in\{0,1,2,3,4\}$):
+    \item \textbf{Binomial distribution}: counts the sum of successes of $n$ repeated Bernoulli experiments (a survey of yes/no answers, and then counting all the 'yes'es; or also $\mathbb{P}(X=x)$ in the example above for $n=4$, $p=\frac{1}{2}$ and $k\in\{0,1,2,3,4\}$ yields $p_X(0)=^{1\!\!\!}/_{\!16}$,\dots):
     \begin{equation}
         p_X(k) = \binom{n}{k}p^k(1-p)^{n-k}
     \end{equation}
@@ -471,7 +469,7 @@ The previous section dealt with integer random variables $X$ to represent the ex
 \begin{testexample}[Life expectancy, pt. 1]
     You can find life-expectancy tables online\footnote{E.g., \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/NVSR/54_14/Table01.xls}} to compute the probability of dying in your $n$th year (column \texttt{D} of the table divided by $100\,000$). The chance of still living beyond age 100 is then given by a probability density:
     \begin{equation}
-        \mathbb{P}(X> 100)=1 - \int_{0}^{100} p_\text{living til given year}(t)\di t
+        \mathbb{P}(X> 100)=1 - \int_{0}^{100} f_\text{living til given year}(t)\di t
     \end{equation}
     The answer to this is 2.1\%, as confirmed by column \texttt{C} (divided by $100\,000$).
 \end{testexample}\vspace{-0.3cm}
@@ -482,76 +480,80 @@ The previous section dealt with integer random variables $X$ to represent the ex
         \begin{equation}
             f_X(x|\mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma}}.
         \end{equation}
-        \item \textbf{Multivariate normal distribution}: we can achieve a multivariate extension of the theory by considering a positive-definite covariance matrix $\bm{\Sigma}$ (see further), with a $k$-dimensional column vector $\mathbf{x}$:
+        \vspace{-0.3cm}
+        \item \textbf{Multivariate normal distribution}: we achieve a $d$-dimensional extension of the theory by considering a covariance matrix $\bm{\Sigma}$ (see further), with a $d$-dimensional column vector $\mathbf{x}$:
         \begin{equation}
-            f_X(\mathbf{x}|\bm{\mu},\bm{\Sigma}) = \frac{1}{\sqrt{2\pi \det\bm{\Sigma}}} e^{-\frac{1}{2}(\mathbf{x}-\bm{\mu})^T\bm{\Sigma}^{-1}(\mathbf{x}-\bm{\mu})}.
+            f_X(\mathbf{x}|\bm{\mu},\bm{\Sigma}) = \frac{1}{(2\pi)^{d/2} \det\bm{\Sigma}^{1/2}} e^{-\frac{1}{2}(\mathbf{x}-\bm{\mu})^T\bm{\Sigma}^{-1}(\mathbf{x}-\bm{\mu})}.
         \end{equation}
+        \vspace{-0.3cm}
         \item \textbf{Gamma distribution}: this distribution is parameterized by shape parameter $\alpha$ and rate parameter $\beta$ can be written as:
         \begin{equation}
-            f_x(x|\alpha,\beta) = \frac{\beta^\alpha x^{\alpha-1}e^{-\beta x}}{\Gamma(\alpha)},
+            f_X(x|\alpha,\beta) = \frac{\beta^\alpha x^{\alpha-1}e^{-\beta x}}{\Gamma(\alpha)},
         \end{equation}
         where $\Gamma$ is the gamma function.
     \end{enumerate}
 \end{spexample}\vspace{-0.3cm}
-{\flushleft Sometimes} you'll find that people write $f_X(x;a,b,\dots)$ rather than $f_X(x|a,b,\dots)$. The former is pronounced `$x$, parameterized by $a,b,\dots$', whereas the latter is pronounced `$x$, given $a,b,\dots$'. For all practical purposes, however, they are the same!
+{\flushleft Sometimes} people write $f_X(x;a,b,\dots)$ (`$x$, parameterized by $a,b,\dots$') instead of $f_X(x|a,b,\dots)$ (`$x$, given $a,b,\dots$'). One assumes parameters, the other assumes random variables; one is more accepted by mathematicians, the other by statisticians. For all practical purposes, however, they are the same!
 \begin{mymathbox}[ams align, title={Probability density function (definition)}, colframe=blue!30!black, center title]
     \mathbb{P}(a\leq X \leq b) \equiv \int_a^b f_X(x)\di x.
 \end{mymathbox}
 
 
 \subsection{Expectation: Mean}
-Random variables have means (averages), computed as the \textbf{expected value} $\mathbb{E}(X)=\sum_x x\mathbb{P}(X=x)$, which is the value $x$ weighed by the relative frequency due to $\mathbb{P}(X=x)$.
+Random variables have their means computed as the \textbf{expected value} $\mathbb{E}[X]\equiv\sum_x x\mathbb{P}(X=x)$, which is the value $x$ weighed by the relative frequency due to $\mathbb{P}(X=x)$.
 \begin{testexample}[Rolling dice, pt. 1]
     Consider a fair 6-sided die, then the expected value is defined as:
     \begin{equation}
-        \mathbb{E}(X)=\sum_{n=1}^6 n\mathbb{P}(X=n) = 1\cdot\frac{1}{6}+2\cdot\frac{1}{6}+\cdots+6\cdot\frac{1}{6}=\frac{7}{2}.
+        \mathbb{E}[X]=\sum_{n=1}^6 n\mathbb{P}(X=n) = 1\cdot\frac{1}{6}+2\cdot\frac{1}{6}+\cdots+6\cdot\frac{1}{6}=\frac{7}{2}.
     \end{equation}
     The expected value is then the average outcome if you'd roll infinitely many times!
 \end{testexample}
 {\flushleft The} expected value is thus the weighted sum over all $x$ with the probability mass function $p_X(x)$, such that more probable outcomes are better represented. Clearly, it corresponds to the \textit{mean} or \textit{average} value that your random variable expresses.
 
-The expected value for the continuous case is computed using the integral: $\mathbb{E}(X)=\int_{\mathbb{R}} x f_X(x)\di x$.
+The expected value for the continuous case is computed using the integral: $\mathbb{E}[X]\equiv\int_{\mathbb{R}} x f_X(x)\di x$.
 \begin{testexample}[Life expectancy, pt. 2]
     Continuing from the previous example, we can compute the expected life expectancy of the population, using the same probabilities as we had before:
     \begin{equation}
-        \mathbb{E}(X)=\int_0^{100} t p_\text{living til given year}(t)\di t,
+        \mathbb{E}[X]=\int_0^{\infty} t f_\text{living til given year}(t)\di t,
     \end{equation}
     Giving as a result that the expected lifespan is $77.9$ years.
 \end{testexample}
 \begin{mymathbox}[ams align, title={Expectation / mean (definition)}, colframe=blue!30!black, center title]
-    \mathbb{E}(X) &\equiv\sum_{x} x p_X(x), \\
-    \mathbb{E}(X) &\equiv\int_\mathbb{R} x f_X(x) \di x.
+    \mathbb{E}[X] &\equiv\sum_{x} x p_X(x), \\
+    \mathbb{E}[X] &\equiv\int_\mathbb{R} x f_X(x) \di x.
 \end{mymathbox}
 {\flushleft We} note down some useful properties of the expectation operator in the box below.
 \begin{mymathbox}[ams align, title={Expectation, rules, $\text{for } (a,b)\in\mathbb{R}$ and $(X,Y)\in\Omega$ and $f$ convex}, colframe=blue!30!black, center title]
-    \mathbb{E}(aX+bY) &= a\mathbb{E}(X)+b\mathbb{E}(Y), && \text{Linearity}, \\
-    \mathbb{E}(XY) & = \mathbb{E}(X)\mathbb{E}(Y),\quad\text{independent }X\text{ and }Y, &&\text{Independence}\\
-    \mathbb{E}(g(X)) & = \sum_{x} g(x) p_X(x), && \text{Law of unconscious statistician},\\
-    \mathbb{E}(\mathbb{I}_{A})&=\mathbb{P}(A), &&\text{Indicator expectation},\\
-    f(\mathbb{E}(X) & \leq \mathbb{E}(f(X)),&&\text{Jensen's inequality}.
+    \mathbb{E}[aX+bY] &= a\mathbb{E}[X]+b\mathbb{E}[Y], && \text{Linearity}, \\
+    \mathbb{E}[XY] & = \mathbb{E}[X]\mathbb{E}[Y],\quad\text{independent }X\text{ and }Y, &&\text{Independence}\\
+    \mathbb{E}[g(X)] & = \sum_{x} g(x) p_X(x), && \text{Law of unconscious statistician},\\
+    \mathbb{E}[\mathbb{I}_{A}]&=\mathbb{P}(A), &&\text{Indicator expectation},\\
+    f(\mathbb{E}[X]) & \leq \mathbb{E}[f(X)],&&\text{Jensen's inequality}.
 \end{mymathbox}
 
 
 
 
 \subsection{Expectation: Variance}
-With the concepts and identities of the previous section, we can derive more interesting quantities. If we call the mean of our random variable $\mu=\mathbb{E}(X)$, then we can find the \textbf{variance} $\mathbb{V}(X)=\mathbb{E}([X-\mu]^2)$ as the expected squared error between the random variable and the mean.
+With the concepts and identities of the previous section, we can derive more interesting quantities. If we call the mean of our random variable $\mu=\mathbb{E}[X]$, then we can find the \textbf{variance} $\sigma\equiv\mathbb{V}(X)\equiv\mathbb{E}[(X-\mu)^2]$ as the expected squared error between the random variable and the mean.
 \begin{testexample}[Rolling dice, pt. 2]
     We established the mean $\mu=\mathbb{E}(X)=\frac{7}{2}$ for throwing die. We can compute the variance with the \textit{law of the unconscious statistician} as the following expectation:
     \begin{align}
-        \mathbb{V}(X)=\mathbb{E}([X-\mu]^2)&=\sum_{n=1}^6 [n-\mu]^2 \mathbb{P}(X=n),\\
+        \mathbb{V}(X)=\mathbb{E}[(X-\mu)^2]&=\sum_{n=1}^6 (n-\mu)^2 \mathbb{P}(X=n),\\
         &=[1-\frac{7}{2}]^2\frac{1}{6} + [2-\frac{7}{2}]^2\frac{1}{6} + \cdots + [6-\frac{7}{2}]^2\frac{1}{6} = \frac{35}{12}.
     \end{align}
-\end{testexample}
-{\flushleft The} following simplification is possible, when realizing that the expected value of a constant remains itself, thus $\mathbb{E}(-2X\mathbb{E}(X)+\mathbb{E}(X)^2)=-2\mathbb{E}(X)\mathbb{E}(X)+\mathbb{E}(X)^2$, such that:
+\end{testexample}\vspace{-0.3cm}
+{\flushleft The} following simplification is possible (note that $\mathbb{E}[X]$ is a uniform constant!):
 \begin{align}
-    \mathbb{V}(X) &= \mathbb{E}([X-\mathbb{E}(X)]^2)=\mathbb{E}\left(X^2-2X\mathbb{E}(X)+\mathbb{E}(X)^2)\right)=\mathbb{E}(X^2)-\mathbb{E}(X)^2 = \mathbb{E}(X^2) - \mu^2.
+    \mathbb{V}(X) = \mathbb{E}[(X-\mathbb{E}(X))^2]&=\mathbb{E}\left[X^2-2X\mathbb{E}[X]+\mathbb{E}[X]^2\right]\\
+    &=\mathbb{E}[X^2]-2\mathbb{E}[X]\mathbb{E}[X]+\mathbb{E}[X]^2,\\
+    &=\mathbb{E}[X^2] - \mathbb{E}[X].
 \end{align}
 \begin{mymathbox}[ams align, title={Variance}, colframe=blue!30!black, center title]
-    \sigma(X)\equiv\mathbb{V}(X)&\equiv\mathbb{E}(\left[X-\mathbb{E}(X)\right]^2)=\mathbb{E}(X^2) - \mathbb{E}(X)^2=\mathbb{E}(X^2) - \mu^2.
+    \sigma(X)\equiv\mathbb{V}(X)&\equiv\mathbb{E}[\left(X-\mathbb{E}(X)\right)^2]=\mathbb{E}[X^2] - \mathbb{E}[X]^2=\mathbb{E}[X^2] - \mu^2.
 \end{mymathbox}
 \subsection{Expectation: Covariance}
-We can generalize the idea of the previous section to the \textbf{covariance}, which measures the association or dependence between two random variables $X$ and $Y$ as $\mathbb{C}(X,Y)=\mathbb{E}([X-\mu_x][Y-\mu_y])$. Note that the variance is thus a special case of the covariance with itself, i.e., $\mathbb{V}(X)=\mathbb{C}(X,X)$. The covariance is positive when the two quantities are positively correlated, and negative when the quantities are negatively correlated.
+We generalize the previous section to the \textbf{covariance}, which measures the association between two random variables $X$ and $Y$ as $\mathbb{C}(X,Y)=\mathbb{E}[(X-\mu_x)(Y-\mu_y)]$. Note that the variance is thus a special case of the covariance with itself, i.e., $\mathbb{V}(X)=\mathbb{C}(X,X)$. The covariance is positive when the two quantities are positively correlated, and negative when the quantities are negatively correlated.
 \begin{testexample}[Correlation of two dice experiments]
     The equation to express Pearson's correlation coefficient is the normalized covariance:
     \begin{equation}
@@ -560,25 +562,25 @@ We can generalize the idea of the previous section to the \textbf{covariance}, w
     If we throw two dice and $X$ counts the sum of the two dice while $Y$ counts the product of the two dice, we can find (e.g., with MATLAB) that $\mu_x=7$ and $\mu_y=\frac{49}{4}$, that $\mathbb{V}(X)=\frac{35}{6}$ and $\mathbb{V}(Y)=\frac{11515}{144}$. Finally, the covariance is $\mathbb{C}(X,Y)=\sum_{x,y}xy\mathbb{P}(X=x,Y=y)-\mu_x\mu_y=\frac{245}{12}$. The correlation is then $\text{Cor}(X,Y)=\frac{121}{128}$. Note that the covariance is computed with a joint probability distribution $\mathbb{P}(X=x,Y=x)\neq\mathbb{P}(X=x)\mathbb{P}(Y=y)$!
 \end{testexample}
 \begin{mymathbox}[ams align, title={Co-variance}, colframe=blue!30!black, center title]
-    \mathbb{C}(X,Y)&\equiv\mathbb{E}(\left[X-\mathbb{E}(X)\right][Y-\mathbb{E}(Y))=\mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y)=\mathbb{E}(XY)-\mu_x\mu_y.
+    \mathbb{C}(X,Y)&\equiv\mathbb{E}[\left(X-\mathbb{E}(X)\right)\left(Y-\mathbb{E}(Y)\right)]=\mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]=\mathbb{E}[XY]-\mu_x\mu_y.
 \end{mymathbox}
 
 \subsection{Expectation: Covariance matrix}
-We previously encountered the covariance matrix in the definition of a multivariate Gaussian. We can now fully define this matrix as $\Sigma_{ij}=\mathbb{C}(X_i,X_j)$. If we would find the covariance matrix for 2 random variables like $X$ and $Y$, the \textbf{symmetric} and \textbf{positive semi-definite} covariance matrix is:
+We previously encountered the covariance matrix in the definition of a multivariate Gaussian. We can now fully define this \textbf{symmetric} ($\mathbb{C}(X,Y)=\mathbb{C}(Y,X)$) and \textbf{positive semi-definite} matrix as $\Sigma_{ij}=\mathbb{C}(X_i,X_j)$. The covariance matrix for 2 random variables, $X_1=X$ and $X_2=Y$, is:
 \begin{equation}
     \bm{\Sigma} = \left[ \begin{array}{cc} \mathbb{C}(X,X) & \mathbb{C}(X,Y) \\
     \mathbb{C}(Y,X) & \mathbb{C}(Y,Y)\end{array} \right] = \left[ \begin{array}{cc} \mathbb{V}(X) & \mathbb{C}(X,Y) \\
     \mathbb{C}(Y,X) & \mathbb{V}(Y)\end{array} \right].
 \end{equation}
 \begin{spexample}[MATLAB's \texttt{std}, \texttt{var} and \texttt{cov} functions]
-    MATLAB is in the habit of returning the \textit{unbiased} variance and covariance matrix through the so-called `Bessel correction' factor $\frac{N}{N-1}$. This is relevant when you only have the sample mean and not the population mean -- this is not the case in the examples we do here! Anyhow, the functions return:
+    MATLAB is in the habit of returning the \textit{unbiased} variance and covariance matrix through the so-called `Bessel correction' factor $\frac{N}{N-1}$ for $N$ the length of the vectors (e.g., $X$). This is relevant when you only have the sample mean and not the population mean -- this is not the case in the examples we do here! Anyhow, the MATLAB built-in functions return:
     \begin{align}
         \texttt{std(X)} &= \sqrt{\frac{N}{N-1}\mathbb{V}(X)},\\
         \texttt{var(X)} &= \frac{N}{N-1}\mathbb{V}(X),\\
         \texttt{cov(X,Y)}&=\frac{N}{N-1}\left[ \begin{array}{cc} \mathbb{C}(X,X) & \mathbb{C}(X,Y) \\
     \mathbb{C}(Y,X) & \mathbb{C}(Y,Y)\end{array} \right]
     \end{align}
-    If you are interested in $\mathbb{C}(X,Y)$, evaluate \texttt{c=cov(X,Y)}, get \texttt{c(1,2)} or \texttt{c(2,1)}, multiply by $\frac{N-1}{N}$ to obtain its biased value. Additionally, \texttt{c(1,1)==var(X)}.
+    If you are interested in $\bm{\Sigma}$ as defined here, you must evaluate it as \texttt{(N-1)*cov(X,Y)/N}.
 \end{spexample}
 \begin{spexample}[Python's \texttt{np.std}, \texttt{np.var} and \texttt{np.cov} functions]
     Python's \texttt{numpy} takes a less unified approach and modifies only the entire covariance matrix:
@@ -591,56 +593,57 @@ We previously encountered the covariance matrix in the definition of a multivari
 \end{spexample}
 
 \subsection{Conditional expectations}
-We finalize the session on expectations by stating a conditional expectation $\mathbb{E}(X|B)$, as well as the marginalized expected value for summing up expected values.
+We finalize the session on expectations by stating a conditional expectation $\mathbb{E}[X|B]$, as well as the marginalized expected value for summing up expected values.
 \begin{mymathbox}[ams align, title={Conditional expectation}, colframe=blue!30!black, center title]
-    \mathbb{E}(X|B)=\sum_x x\mathbb{P}(X=x|B).
+    \mathbb{E}_{X|B}[X]\equiv\mathbb{E}[X|B]\equiv\sum_x x\mathbb{P}(X=x|B).
 \end{mymathbox}
 \begin{mymathbox}[ams align, title={Partition theorem for expectations}, colframe=blue!30!black, center title]
-    \mathbb{E}(X)=\sum_i \mathbb{E}(X|B_i)\mathbb{E}(B_i).
+    \mathbb{E}[X]=\sum_i \mathbb{E}[X|B_i]\mathbb{E}[B_i].
 \end{mymathbox}
 
 
 \subsection{I.I.D. sampling of random variables}
-Generally, our samples are \textit{realizations} from the possible sample space. When we repeatedly draw samples from the possible sample space, we can make a number of simple theoretical observations when we assume our samples are \textbf{i.i.d.: independent and identically distributed}:
+Generally, our data are \textit{realizations} from the possible sample space. When we repeatedly draw samples from the possible sample space, we can make a number of simple theoretical observations when we assume our samples are \textbf{i.i.d.: independent and identically distributed}:
 \begin{enumerate}\itemsep0em
-    \item Independent: \textit{the sequential order makes no difference},
+    \item Independent: \textit{the order in which you draw the samples makes no difference},
     \item Identically distributed: \textit{the samples are drawn from the same probability distribution}.
 \end{enumerate}
 We already know the mathematical implication of `independence', and the `identical distribution' implies that we can re-use a single probability density every time. 
 \begin{testexample}[Throwing independent and identical dice]
-    Throwing an identical die (identically distributed) gives $n$ independent experiments. The chance at any unique ordered outcome $\mathcal{X}=\{x_1,\dots,x_n\}$ for $n$ throws is:
+    Throwing $n$ fair die yields a probability for any unique ordered outcome $\mathcal{X}=\{x_1,\dots,x_n\}$:
+    \vspace{-0.3cm}
     \begin{equation}
         \mathbb{P}(X_1=x_1,X_2=x_2,\dots,X_n=x_n) = \prod_{i=1}^n \mathbb{P}(X_i=x_i) = \frac{1}{6^n}.
     \end{equation}
 \end{testexample}
-\begin{testexample}[Tossing weighted coins]
-    A normal coin has a 50\% chance at either heads or tails. Tossing the coins $n$ times is an i.i.d. experiment. The probability of a \textit{unique} ordered outcome $\mathcal{X}$ containing $h$ heads:
-    \begin{equation}
-        \mathbb{P}(\mathcal{X}) = 0.5^h 0.5^{n-h} = 0.5^n.
-    \end{equation}
-    However, we can manipulate the coin such that there is a 60\% chance at heads instead:
-    \begin{equation}
-        \mathbb{P}^*(\mathcal{X}) = 0.6^h 0.4^{n-h}.
-    \end{equation}
-    Say we do 5 throws with the outcome $\mathcal{X}=\{H,H,T,H,T\}$. The probability of this is:
-    \begin{align}
-        \mathbb{P}(X=\mathcal{X}) & = 0.5^5=0.03125,&\mathbb{P}^*(X=\mathcal{X}) &= 0.6^3 0.4^2 =0.03456.
-    \end{align}
-    The probability of realizing second experiment is thus slight increased -- it is a more likely outcome.
-\end{testexample}
-{\flushleft The} point of the last example is that an identical distribution does not imply that all outcomes are equally likely! Just that the probability distribution for each experiment is the same.
+% \begin{testexample}[Tossing weighted coins]
+%     A normal coin has a 50\% chance at either heads or tails. Tossing the coins $n$ times is an i.i.d. experiment. The probability of a \textit{unique}  outcome $\mathcal{X}$ containing $h$ heads:
+%     \begin{equation}
+%         \mathbb{P}(\mathcal{X}) = 0.5^h 0.5^{n-h} = 0.5^n.
+%     \end{equation}
+%     However, we can manipulate the coin such that there is a 60\% chance at heads instead:
+%     \begin{equation}
+%         \mathbb{P}^*(\mathcal{X}) = 0.6^h 0.4^{n-h}.
+%     \end{equation}
+%     Say we do 5 throws with the outcome $\mathcal{X}=\{H,H,T,H,T\}$. The probability of this is:
+%     \begin{align}
+%         \mathbb{P}(\mathcal{X}) & = 0.5^5=0.03125,&\mathbb{P}^*(\mathcal{X}) &= 0.6^3 0.4^2 =0.03456.
+%     \end{align}
+%     The probability of realizing second experiment is thus slight increased -- it is a more likely outcome.
+% \end{testexample}
+% {\flushleft The} point of the last example is that an identical distribution does not imply that all outcomes are equally likely! Just that the probability distribution for each experiment is the same.
 
-Important implications or consequences of i.i.d. samples are that the expected value for a random variable $X$ are denoted in the box below, concerned with \textbf{sums} of random variables:
-\begin{mymathbox}[ams align, title={Sums of i.i.d. samples}, colframe=blue!30!black, center title]
-    \mathbb{E}(X_1+X_2+\dots+X_n)&=\mathbb{E}(X_1)+\mathbb{E}(X_2)+\dots+\mathbb{E}(X_n)=n\mathbb{E}(X),\\
-    \mathbb{V}(X_1+X_2+\dots+X_n)&=\mathbb{V}(X_1)+\mathbb{V}(V_2)+\dots+\mathbb{V}(X_n)=n\mathbb{V}(X).
-\end{mymathbox}
-\begin{testexample}[Sum of dice]
-    The expected value and variance for the sum of $n$ dice throws is $n$ times the known values:
-    \begin{align}
-        \mathbb{E}(X_1+\dots+X_n)&=\frac{7}{2}n, & \mathbb{V}(X_1+\dots+X_N) = \frac{35}{12}n. 
-    \end{align}
-\end{testexample}
+% Important implications or consequences of i.i.d. samples are that the expected value for a random variable $X$ are denoted in the box below, concerned with \textbf{sums} of random variables:
+% \begin{mymathbox}[ams align, title={Sums of i.i.d. samples}, colframe=blue!30!black, center title]
+%     \mathbb{E}(X_1+X_2+\dots+X_n)&=\mathbb{E}(X_1)+\mathbb{E}(X_2)+\dots+\mathbb{E}(X_n)=n\mathbb{E}(X),\\
+%     \mathbb{V}(X_1+X_2+\dots+X_n)&=\mathbb{V}(X_1)+\mathbb{V}(V_2)+\dots+\mathbb{V}(X_n)=n\mathbb{V}(X).
+% \end{mymathbox}
+% \begin{testexample}[Sum of dice]
+%     The expected value and variance for the sum of $n$ dice throws is $n$ times the known values:
+%     \begin{align}
+%         \mathbb{E}(X_1+\dots+X_n)&=\frac{7}{2}n, & \mathbb{V}(X_1+\dots+X_N) = \frac{35}{12}n. 
+%     \end{align}
+% \end{testexample}
 
 % We assume a vector pair $(X,Y)\in\mathbb{R}^2$ and extend the theory of probability mass function accordingly:
 % \begin{mymathbox}[ams align, title={Probability density function for bivariate data}, colframe=blue!30!black, center title]
@@ -656,10 +659,13 @@ Important implications or consequences of i.i.d. samples are that the expected v
 %     p_\mathcal{X}(\mathbf{x})=p_{X_1}(x_1)p_{X_2}(x_2)\cdots p_{X_n}(x_n) = \prod_{i=1}^n p_{X_i}(x_i).
 % \end{equation}
 
+\vspace{-0.5cm}
+
 \subsection{Sampling from a distribution \& mean of iid samples}
-We denote the sampling operation using the $\sim$ symbol, such that we can e.g. say that a random variable $X$ is drawn from the Bernoulli distribution as: $X \sim \text{Bernoulli}(p)$. Strictly speaking, the symbol $\sim$ means asymptotic equivalence for $n\to\infty$.
+We formally denote the sampling operation using the $\sim$ symbol such that we can, e.g., say that a random variable $X$ is drawn from the Bernoulli distribution as: $X \sim \text{Bernoulli}(p)$. 
+% Strictly speaking, the symbol $\sim$ means asymptotic equivalence for $n\to\infty$.
 \begin{testexample}[Flipping a coin]
-    Defining $X$ to count if the coin shows heads, we know:
+    Defining $X$ to denote if the coin shows heads, we know:
     \begin{equation}
         X\sim\text{Bernoulli}(1/2).
     \end{equation}
@@ -674,39 +680,42 @@ We denote the sampling operation using the $\sim$ symbol, such that we can e.g. 
 % \end{equation}
 % where $\mathcal{N}$ represents the normal distribution. This remarkable property holds even when $X_1,X_2,\dots$ are not normally distributed themselves. 
 
-Now define $\overline{X}_n=(X_1+X_2+\dots+X_n)/n$ as the \textbf{sample mean}. If we assume that $X_i$ are sampled iid, and with the identities of the previous section, we can then see that the expectation becomes:
+{\flushleft Now} define $\overline{X}_n=(X_1+X_2+\dots+X_n)/n$ as the \textbf{sample mean}. If we assume that $X_i$ are sampled iid, and $\mathbb{E}[X_i]=\mu$ and $\mathbb{V}[X_i]=\sigma^2$, we can then see that the expectation returns the true mean:
 \begin{equation}
-    \mathbb{E}(\overline{X}_n) = \frac{1}{n}\mathbb{E}(X_1+X_2+\dots+X_n)=\mathbb{E}(X),
+    \mathbb{E}[\overline{X}_n] = \frac{1}{n}\mathbb{E}[X_1+X_2+\dots+X_n]=\frac{1}{n}(\mu+\mu+\dots+\mu)=\mu,
 \end{equation}
-while the variance becomes:
+and the variance of this estimation reduces inversely with $n$:
 \begin{equation}
-    \mathbb{V}(\overline{X}_n) = \frac{1}{n^2}\mathbb{V}(X_1+X_2+\dots+X_n) = \frac{1}{n}\mathbb{V}(X).
+    \mathbb{V}(\overline{X}_n) = \frac{1}{n^2}\mathbb{V}(X_1+X_2+\dots+X_n) = \frac{1}{n^2}(\sigma^2+\sigma^2+\dots+\sigma^2) = \frac{\sigma^2}{n}.
 \end{equation}
-Therefore, the sample mean for iid sampled data estimates the true mean, and the variance of the sample mean gets closer to the true mean when we increase the number of samples $n$, although not very quickly! The \textbf{central limit theorem} tells us that for a large enough $n$, we have:
+%Therefore, the sample mean for iid sampled data is expected to represent the true mean, while the variance of the sample mean gets closer to the true mean when we increase the number of samples $n$, although not very quickly!
+The \textbf{central limit theorem} tells us that for a large enough $n$, we have:
 \begin{equation}
-    \frac{n(\overline{X}_n-\mathbb{E}(X))}{\sqrt{\mathbb{V}(X)}} \sim \mathcal{N}(0,1),
+    \overline{X}_n \sim \mu + \frac{\mathcal{N}(0,\sigma^2)}{\sqrt{n}}
 \end{equation}
-where $\mathcal{N}(\mu,\sigma^2)$ is the normal/Gaussian distribution with mean $\mu$ and variance $\sigma^2$. This remarkable property means that if we draw $n$ samples from an arbitrary distribution and take the sample average, then this distribution will become more-and-more normally distributed.
-\begin{testexample}[Summing to a Gaussian]
-    Assume that we have a simple random variable with a uniform probability mass function $\mathbb{P}(X=1)=\mathbb{P}(X=2)=\mathbb{P}(X=3)=\frac{1}{3}$. Based on this, we have an additional random variable which is the sample mean $\overline{X}=(X_1+X_2+\dots+X_n)/n$. Finally defining $Z_n=n(\overline{X}_n-\mu)/\sqrt{\mathbb{V}(X)}$, for variance $\mathbb{V}(x)=2$ and mean $\mu=\mathbb{E}(X)=2$. If we choose $n=3$, we get a total sample space with following probability mass function:
-    \begin{equation}
-        \overline{X}=\left( \begin{array}{c} \frac{1 + 1 + 1}{3} = 1 \\ \frac{1 + 1 + 2}{3} = \frac{4}{3} \\ \vdots  \\ \frac{3+3+3}{3} = 3 \end{array} \right)\longrightarrow\left( \begin{array}{c} \mathbb{P}(\overline{X}=1)=1/27 \\
-        \mathbb{P}(\overline{X}=\frac{4}{3})=3/27 \\
-        \mathbb{P}(\overline{X}=\frac{5}{3})=6/27 \\
-        \mathbb{P}(\overline{X}=2)=7/27 \\
-        \mathbb{P}(\overline{X}=\frac{7}{3})=6/27 \\
-        \mathbb{P}(\overline{X}=\frac{8}{3})=3/27 \\
-        \mathbb{P}(\overline{X}=3)=1/27\end{array} \right) \longrightarrow \left( \begin{array}{r}
-        \mathbb{P}(Z=-3\sqrt{1/2})=1/27 \\
-        \mathbb{P}(Z=-2\sqrt{1/2})=3/27 \\
-        \mathbb{P}(Z=-1\sqrt{1/2})=6/27 \\
-        \mathbb{P}(Z=\hphantom{{-}{1\,}/{1}\sqrt{}}0)=7/27 \\
-        \mathbb{P}(Z=\hphantom{-}1\sqrt{1/2})=6/27 \\
-        \mathbb{P}(Z=\hphantom{-}2\sqrt{1/2})=3/27 \\
-        \mathbb{P}(Z=\hphantom{-}3\sqrt{1/2})=1/27\end{array} \right),
-    \end{equation}
-    resembling the normal distribution with $\mu=0,\sigma=1$, and will converge there for large $n$!
-\end{testexample}
+where $\mathcal{N}(\mu,\sigma^2)$ is the normal/Gaussian distribution with mean $\mu$ and variance $\sigma^2$. 
+%This remarkable property means that if we draw $n$ samples from an arbitrary distribution and take the sample average, then this distribution will become more-and-more normally distributed. 
+This property is widely used in hypothesis testing, because a good number of (controlled) samples can be considered as `draws' from this distribution, which we use to estimate $\mu$ and $\sigma$ -- and then we can see how much a new (uncontrolled) sample is located with respect to this `normal'!
+% \begin{testexample}[Summing to a Gaussian]
+%     Assume that we have a simple random variable with a uniform probability mass function $\mathbb{P}(X=1)=\mathbb{P}(X=2)=\mathbb{P}(X=3)=\frac{1}{3}$. Based on this, we have an additional random variable which is the sample mean $\overline{X}=(X_1+X_2+\dots+X_n)/n$. Finally defining $Z_n=n(\overline{X}_n-\mu)/\sqrt{\mathbb{V}(X)}$, for variance $\mathbb{V}(x)=2$ and mean $\mu=\mathbb{E}(X)=2$. If we choose $n=3$, we get a total sample space with following probability mass function:
+%     \begin{equation}
+%         \overline{X}=\left( \begin{array}{c} \frac{1 + 1 + 1}{3} = 1 \\ \frac{1 + 1 + 2}{3} = \frac{4}{3} \\ \vdots  \\ \frac{3+3+3}{3} = 3 \end{array} \right)\longrightarrow\left( \begin{array}{c} \mathbb{P}(\overline{X}=1)=1/27 \\
+%         \mathbb{P}(\overline{X}=\frac{4}{3})=3/27 \\
+%         \mathbb{P}(\overline{X}=\frac{5}{3})=6/27 \\
+%         \mathbb{P}(\overline{X}=2)=7/27 \\
+%         \mathbb{P}(\overline{X}=\frac{7}{3})=6/27 \\
+%         \mathbb{P}(\overline{X}=\frac{8}{3})=3/27 \\
+%         \mathbb{P}(\overline{X}=3)=1/27\end{array} \right) \longrightarrow \left( \begin{array}{r}
+%         \mathbb{P}(Z=-3\sqrt{1/2})=1/27 \\
+%         \mathbb{P}(Z=-2\sqrt{1/2})=3/27 \\
+%         \mathbb{P}(Z=-1\sqrt{1/2})=6/27 \\
+%         \mathbb{P}(Z=\hphantom{{-}{1\,}/{1}\sqrt{}}0)=7/27 \\
+%         \mathbb{P}(Z=\hphantom{-}1\sqrt{1/2})=6/27 \\
+%         \mathbb{P}(Z=\hphantom{-}2\sqrt{1/2})=3/27 \\
+%         \mathbb{P}(Z=\hphantom{-}3\sqrt{1/2})=1/27\end{array} \right),
+%     \end{equation}
+%     resembling the normal distribution with $\mu=0,\sigma=1$, and will converge there for large $n$!
+% \end{testexample}
 
 \subsection{Formal summary}
 We formally summarize the above section in more abstract terms. Probability is the mathematical language for quantifying uncertainty. We consider this in terms of testing outcomes through `experiments'. For the notation we will use set-theory, for which $i\in\{A\cap B\}$ means element $i$ is present in both sets $A$ \textit{and} $B$. The expression, $i\in\{A\cup B\}$ is an element in $A$ \textit{or} $B$ (or both). Furthermore, the expression $i\in\{\Omega\setminus A\}$ represents an element $i$ that is in $\Omega$ but \textit{not} in $A$. The notation $\varnothing$ represents the empty set, e.g., $\Omega\setminus\Omega=\varnothing$. Finally, the cardinality of a set $|A|$ counts all the elements in the set.
@@ -714,7 +723,7 @@ We formally summarize the above section in more abstract terms. Probability is t
     The \textbf{sample space} $\Omega=\{\omega_1,\omega_2,\dots\}$ represents all possible outcomes of the experiment. Points $\omega$ in $\Omega$ are called the \textbf{sample outcomes} or \textbf{realizations}. Exactly \textbf{one} of the outcomes actually occurs. \textbf{Events} $A\subseteq\Omega$ are subsets of $\Omega$, thus may consist of multiple outcomes $\omega$.
 \end{definition}
 \begin{example}[Tossing coins]
-    If we toss two coins, then $\Omega=\{HH,HT,TH,TT\}$. The event that the first toss is heads is $A=\{HH,HT\}$. An actual realization may be $\omega_3=\{TH\}$, s.t. $A$ is false.
+    If we toss two coins, then $\Omega=\{HH,HT,TH,TT\}$. The event that the first toss is heads is $A=\{HH,HT\}$. An actual realization may be $\omega_3=\{TH\}$, such that $A$ is false.
 \end{example}
 \begin{theorem}[Basic axioms]
     \ 
@@ -768,33 +777,33 @@ We formally summarize the above section in more abstract terms. Probability is t
     \end{equation}
 \end{definition}
 \begin{definition}[Probability density]
-    If the states are not discrete but continuous, the probability mass function ceases to be functional, but we may integrate over a range of probability density:
+    If the states are not discrete but continuous, we may integrate over a range of probability density:
     \begin{equation}
         \mathbb{P}(a\leq X \leq b) = \int_{a}^b f_X(x)\di x.
     \end{equation}
-    For which we use the integrable probability function $f_X$ which is related to the cumulative distribution function $F_x$ through the following two relations:
+    We use the integrable probability function $f_X$ which is related to the cumulative distribution function $F_X$ through the following two relations:
     \begin{align}
-        F_x &= \int_{-\infty}^x f_x(u)\di u,& f_x = \frac{\di}{\di x}F_x(x).
+        F_X(x) &= \int_{-\infty}^x f_X(u)\di u,& f_X = \frac{\di}{\di x}F_X(x).
     \end{align}
 \end{definition}
 \begin{definition}[Expectation]
-    The expectation operator takes the sum over all possible values and thei associated probabilities for discrete or continuous data:
+    The expectation operator takes the sum over all possible values weighted by their associated probabilities for discrete or continuous data:
     \begin{align}
-        \mathbb{E}(X) &= \sum_x x\mathbb{P}(X=x),& \mathbb{E}(X) &=\int_\mathbb{R} x f_X(x)\di x.
+        \mathbb{E}[X] &= \sum_x x\mathbb{P}(X=x),& \mathbb{E}[X] &=\int_\mathbb{R} x f_X(x)\di x.
     \end{align}
 \end{definition}
 \begin{definition}[Moments of expectation]
     The three important relations of expectation are the mean:
     \begin{equation}
-        \mathbb{E}(X) = \mu_x,
+        \mathbb{E}[X] = \mu_x,
     \end{equation}
     the variance:
     \begin{equation}
-        \mathbb{V}(X)=\mathbb{E}([X-\mu_x]^2) = \mathbb{E}(X^2) - \mu_x^2,
+        \mathbb{V}(X)=\mathbb{E}[(X-\mu_x)^2] = \mathbb{E}[X^2] - \mu_x^2,
     \end{equation}
     and the covariance:
     \begin{equation}
-        \text{Cov}(X,Y)=\mathbb{E}([X-\mu_x][Y-\mu_y]) = \mathbb{E}(XY)-\mu_x\mu_y.
+        \text{Cov}(X,Y)=\mathbb{E}[(X-\mu_x)(Y-\mu_y)] = \mathbb{E}[XY]-\mu_x\mu_y.
     \end{equation}
 \end{definition}
 \begin{definition}[Indicator function]
@@ -804,7 +813,7 @@ We formally summarize the above section in more abstract terms. Probability is t
     \end{equation}
     which selects only the elements of relevance as, e.g.:
     \begin{equation}
-        \mathbb{E}(\mathbb{I}_{X=x_0})=\sum_x \mathbb{I}_{X=x_0}\mathbb{P}(X=x) = \mathbb{P}(X=x_0). 
+        \mathbb{E}[\mathbb{I}_{X=x_0}]=\sum_x \mathbb{I}_{X=x_0}\mathbb{P}(X=x) = \mathbb{P}(X=x_0). 
     \end{equation}
 \end{definition}
 
@@ -820,41 +829,43 @@ Computer science used to be about writing a program that turns inputs into outpu
 % \end{spexample}
 
 % The following graph is a good overview of most of the topics in `classical machine learning', along with some typical methods to perform the four typical tasks within machine learning: classification, regression, clustering \& dimensionality reduction.
+\vspace{-0.2cm}
 \begin{center}
-    \includegraphics[width=0.8\textwidth]{MLtree.png}
+    \includegraphics[width=0.6\textwidth]{MLtree.png}
 \end{center}
+\vspace{-0.3cm}
 
 \subsection{The formalized set-up}
 Imagine a data-set with samples and their label:
 \begin{equation}
     \mathcal{D} = \Bigg\{ (\vec{x}_1,y_1), \dots, (\vec{x}_N,y_N) \Bigg\} \subseteq \mathcal{X}\times\mathcal{Y}
 \end{equation}
-where $\vec{x}_i$ is the $i$-th \textbf{feature vector} from space $\mathcal{X}$, and $y_i$ the corresponding \textbf{label} from space $\mathcal{Y}$. (the exact structure of $\mathcal{Y}$ can be binary classes ($\mathcal{Y}=\{0,1\}$) or multi-classes ($\mathcal{Y}=\{0,1,\dots,k\}$) when we do a classification problem, or real numbers ($\mathcal{Y}=\mathbb{R}$) for a regression problem). We assume that the pairs are drawn i.i.d. from a distribution,
+where $\vec{x}_i$ is the $i$-th \textbf{feature vector} from space $\mathcal{X}$, and $y_i$ the corresponding \textbf{label} from space $\mathcal{Y}$. ($\mathcal{Y}$ could represent $k$ classes $\{0,1,\dots,k\}$ when we do a classification problem, or all real numbers $\mathbb{R}$ for a regression problem). We assume that the pairs are drawn i.i.d. from a distribution,
 \begin{equation}
     (\vec{x}_i,y_i) \sim P,
 \end{equation}
 but this distribution is unknown to us!
 
-Then we need to learn a program (called a `hypothesis'), referred to as $h(x)$ or $f(x)$ that maps $\vec{x}_i$ into $y_i$. We assume that the hypothesis $h$ is drawn from its own class $h\in\mathcal{C}$. Examples of the space $\mathcal{C}$ are decision trees, linear classifiers, artificial neural networks, support vector machines, \dots. The optimal algorithm is a problem-dependent feature. It often pays off to try a large number of methods (the `\textbf{No Free Lunch theorem}' states that there is no single optimal problem-independent algorithm).
-% \begin{spexample}[No Free Lunch theorem]
-%     The No Free Lunch theorem states that there is no single machine learning algorithm that works better than the alternatives on \textit{all} problems. The contribution of NFL is that it tells us choosing an appropriate algorithm requires making assumptions about the kinds of target functions the algorithm is being used for. With no assumptions, no ``meta-algorithm'', such as the scientific method, performs better than random choice! In our case, it thus means that we should try a variety of models to see which model works optimally for our problem.
-% \end{spexample}
+Then we require a program (or `hypothesis'), referred to as $h(x)$ or $f(x)$ that maps $\vec{x}_i$ into $y_i$. We assume that the hypothesis $h$ is drawn from its own class $h\in\mathcal{C}$. Examples of the space $\mathcal{C}$ are decision trees, linear classifiers, artificial neural networks, support vector machines, \dots. The optimal algorithm is a problem-dependent feature. It often pays off to try a large number of methods (the `\textbf{No Free Lunch theorem}' states that there is no single optimal problem-independent algorithm).
+\begin{spexample}[No Free Lunch theorem]
+    The No Free Lunch (NFL) theorem states that there is no single algorithm that works optimally on \textit{all} problems. The contribution of NFL is that it tells us choosing an appropriate algorithm requires making assumptions about the kinds of target functions the algorithm is being used for. With no assumptions, no `meta-algorithm' performs better than random choice! In our case, it thus means that we should try a variety of models to see which model works optimally for our problem.
+\end{spexample}
 
 \subsection{Loss functions \& generalization}
 To be able to distinguish between different hypotheses $h$, we require a scoring function that tells us `how well did my hypothesis perform for my data?'. This is provided by a \textbf{loss function} $L$, which tells us how \textit{badly} we predict a given set of samples.
 \begin{spexample}[Loss-functions]
     \begin{enumerate}\itemsep0em
-        \item \textbf{0-1 loss}. This loss function counts the fraction of wrong predictions:
+        \item \textbf{0-1 loss}. This loss function counts the number of wrong predictions:
         \begin{equation}
-            L(h,\mathcal{D}) = \frac{1}{N}\sum_{i=1}^N \mathbb{I}_{h(\vec{x}_i)\neq y_i}.
+            L(h,\mathcal{D}) = \sum_{i=1}^N \mathbb{I}_{h(\vec{x}_i)\neq y_i}.
         \end{equation}
         \item \textbf{Squared loss}. For regression, it is more interesting to see how far off the true answer you are, which is typically measured with a squared loss function, weighing large errors extra:
         \begin{equation}
-            L(h,\mathcal{D}) = \frac{1}{N}\sum_{i=1}^N \lvert h(\vec{x}_i)-y_i \rvert^2.
+            L(h,\mathcal{D}) = \sum_{i=1}^N \lvert h(\vec{x}_i)-y_i \rvert^2.
         \end{equation}
         \item \textbf{Absolute loss}. Rather than the $L^2$-norm of the squared loss, we can consider an $L^1$-norm:
         \begin{equation}
-            L(h,\mathcal{D}) = \frac{1}{N}\sum_{i=1}^N \lvert h(\vec{x}_i)-y_i\rvert.
+            L(h,\mathcal{D}) = \sum_{i=1}^N \lvert h(\vec{x}_i)-y_i\rvert.
         \end{equation}
         In this setting, large errors will be less amplified -- you don't want the squared loss measure if large errors or statistical flukes are present in the training data (when big outliers are squared, they dominate the loss function's score fully, even if you do well on the rest!).
     \end{enumerate}
@@ -869,22 +880,22 @@ it will have a loss-function $L(h^\bullet,\mathcal{Z}^\text{train})=0$, yet it w
 \end{testexample}
 
 \subsection{Risk functions \& generalization}
-So, we want to obtain a hypothesis $h$ that maps all relevant data inputs $\mathcal{X}$ to solutions $\mathcal{Y}$. However, $h$ can only trained on a subset $\mathcal{X}^\text{train}\subset\mathcal{X}$, thus the difficulty lies in \textit{generalization}: how can we be sure that our hypothesis fits not only the training data but also new unseen data.
+So, we want to obtain a hypothesis $h$ that maps all relevant data inputs $\mathcal{X}$ to solutions $\mathcal{Y}$. However, $h$ can only trained on a subset $\mathcal{Z}^\text{train}\subset\mathcal{D}$, thus the difficulty lies in \textit{generalization}: how can we be sure that our hypothesis fits not only the training data but also new unseen data.
 \begin{testexample}[Underfitting and overfitting]
     The goal in machine learning is to find a function that works well on \textit{all} relevant inputs, while only having a limited number of (noisy) training data available. Therefore, our optimal solution lies somewhere between an underfitting and overfitting solution:\\
     \begin{center}\includegraphics[width=0.7\textwidth]{Overfitting.png}\end{center}\vspace{-0.5cm}
 \end{testexample}
-{\flushleft Assume} that $\mathcal{Z}^\text{train}$ is drawn i.i.d. from the distribution as $P$. Then choose a loss function $L(h,\mathcal{D}))$. We then define an \textbf{Expected risk function} that expresses the expected loss for \textit{all} data $\mathcal{D}$:
+{\flushleft Assume} that $\mathcal{Z}^\text{train}$ is drawn i.i.d. from the distribution $P$. Then choose a loss function $L(h,\mathcal{D}))$. We then define an \textbf{Expected risk function} that expresses the expected loss for \textit{all} data $\mathcal{D}$:
 \begin{equation}
-    R(h,\mathcal{D}) = \mathbb{E}(L(h,\mathcal{D})).\label{eq:exprisk}
+    R(h,\mathcal{D}) = \mathbb{E}[L(h,\mathcal{D})].\label{eq:exprisk}
 \end{equation}
 As an example, with the 0-1 loss-function we would obtain:
 \begin{equation}
-    R(h,\mathcal{D}) = \mathbb{E}(\mathbb{I}_{\hat{y}^\text{predicted}\neq y^\text{true}}).
+    R(h,\mathcal{D}) = \mathbb{E}[\mathbb{I}_{\hat{y}^\text{predicted}\neq y^\text{true}}].
 \end{equation}
-However, we can only compute the \textbf{Empirical risk function} (written with $R$-hat) based on the $N$ training data $\mathcal{Z}^\text{train}$, which simply equals the loss function:
+However, we can only compute the \textbf{Empirical risk function} (written with $R$-hat) based on the $N$ training data $\mathcal{Z}^\text{train}$, which simply equals the loss function equally weighted for all available data:
 \begin{equation}
-    \hat{R}(h,\mathcal{Z}^\text{train}) = L(h,\mathcal{Z}^\text{train})\label{eq:emprisk}.
+    \hat{R}(h,\mathcal{Z}^\text{train}) = \frac{1}{N} L(h,\mathcal{Z}^\text{train})\label{eq:emprisk}.
 \end{equation}
 As an example, with the 0-1 loss-function we would obtain:
 \begin{equation}
@@ -892,11 +903,11 @@ As an example, with the 0-1 loss-function we would obtain:
 \end{equation}
 If we just choose the function $h$ that minimizes the \textit{empirical risk function}, we're prone to obtain a hypothesis that is overfitting or just memorizes all the inputs. Often it holds that the optimal model $\hat{h}\in\argmin_h\hat{R}(h,\mathcal{Z}^\text{train})$ based on the training data overestimates the performance on all the data:
 \begin{equation}
-    \hat{R}(\hat{h},\mathcal{X}^\text{train},\mathcal{Y}^\text{train}) < R(\hat{h},\mathcal{X},\mathcal{Y}).
+    \hat{R}(\hat{h},\mathcal{Z}^\text{train}) < R(\hat{h},\mathcal{D}).
 \end{equation}
 \begin{mymathbox}[ams align, title={Expected and Empirical Risk Functions}, colframe=blue!30!black, center title]
     R(h,\mathcal{D}) &= \mathbb{E}(L(h,\mathcal{D})),\\
-    \hat{R}(h,\mathcal{Z}^\text{train}) &= L(h,\mathcal{Z}^\text{train}).
+    \hat{R}(h,\mathcal{Z}^\text{train}) &= \frac{1}{N}L(h,\mathcal{Z}^\text{train}).
 \end{mymathbox}
 
 \subsection{Generalization error \& holdout strategy}
@@ -904,7 +915,7 @@ Clearly, with only knowledge of the training data, it appears impossible to gain
 \begin{equation}
     \hat{R}(\hat{h},\mathcal{Z}^\text{test}) = \frac{1}{M}\sum_{m=1}^M \mathbb{I}_{\hat{h}(x_m)\neq y_m}.
 \end{equation}
-The test data-set should {\color{red}{\textbf{\textit{never}}}} be used within the training algorithm! The test error then gives an idea of the level of underfitting or overfitting done on the training data, as it gives an estimate of the generalization error. Ideally, the model is tested only once on the test data -- for if one keeps tweaking the model to improve the score on the test data-set we are, in a complicated way, trying to fit the test data-set as well! Therefore, it often also holds that the trained hypothesis $\hat{h}\in\arg\min \hat{R}(h,\mathcal{Z}^\text{train})$ still overestimates the expected risk, but is better already.
+The test data-set should {\color{red}{\textbf{\textit{never}}}} be used within the training algorithm! The test error then gives an idea of the level of underfitting or overfitting, as it gives an estimate of the generalization error. Ideally, the model is tested only once on the test data -- for if one keeps tweaking the model to improve the score on the test data-set we are, in a complicated way, fitting our model to the test data-set as well! Therefore, it often also holds that the trained hypothesis $\hat{h}\in\arg\min \hat{R}(h,\mathcal{Z}^\text{train})$ still overestimates the expected risk, but is better already.
 \begin{equation}
     \hat{R}(\hat{h},\mathcal{Z}^\text{test}) < R(\hat{h},\mathcal{D}).
 \end{equation}
@@ -914,7 +925,7 @@ The test data-set should {\color{red}{\textbf{\textit{never}}}} be used within t
     \begin{equation}
         \hat{h} \in \argmin_{h}\hat{R}(h,\mathcal{Z}^\text{train}),
     \end{equation}
-    we likely overfit and have a poor test-score, $\hat{R}(\hat{h},\mathcal{Z}^\text{test})$. Then how to fine-tune our model? Well -- we create \textit{another} split of the data: the \textbf{validation data}. This is equally held out during training like the test data, but is used to score various models immediately after the training; and the set of model `hyper-parameters' that optimize the \textbf{validation (or holdout) score} become a good approximation of which model is most appropriate.\\
+    we likely overfit and have a poor test-score, $\hat{R}(\hat{h},\mathcal{Z}^\text{test})$. Then how to fine-tune our model? Well -- we create \textit{another} split of the data: the \textbf{validation data}. This is equally held out during training like the test data, but is used to score various models immediately after the training; and the set of model `hyper-parameters' that optimize the \textbf{holdout score} become a good approximation of which model is most appropriate. Retraining on \textit{all} data with those optimal parameters then gives the final model, for which the test error may be computed.
     \begin{center}\includegraphics[width=0.8\textwidth]{holdout-strategy.jpg}\end{center}
 \end{spexample}
 
@@ -922,7 +933,7 @@ The test data-set should {\color{red}{\textbf{\textit{never}}}} be used within t
 \section{Machine learning 102: Classification}
 \subsection{Nearest neighbours}
 \subsubsection{k-NN algorithm}
-So, before going into the more statistical notions, a quick overview of the machine learning methods seems appropriate. The first method worth looking at is the ($k$)-nearest neighbour algorithm. The assumption is simple: similar inputs must have similar outputs. The the k-NN algorithm, for any test input $\vec{x}$, assigns it the most common label $y$ amongst its $k$ most similar training inputs. For example, in the below scenario we use $k=3$, yielding two blue points and one red point closest to the tested $\vec{x}$ (where we assign blue the $+1$ label and red the $-1$ label). This results in a majority predicting the label $+1$, which we may assign to $\vec{x}$ correspondingly:
+So, before going into the more statistical notions, a quick overview of the machine learning methods seems appropriate. The first method worth looking at is the ($k$-)nearest neighbour algorithm. The assumption is simple: similar inputs must have similar outputs. The the k-NN algorithm, for any test input $\vec{x}$, assigns it the most common label $y$ amongst its $k$ most similar training inputs. For example, in the below scenario we use $k=3$, yielding two blue points and one red point closest to the tested $\vec{x}$ (where we assign blue the $+1$ label and red the $-1$ label). This results in a majority predicting the label $+1$, which we may assign to $\vec{x}$ correspondingly:
 \begin{center}\includegraphics[width=0.4\textwidth]{knnfig.png}\end{center}
 
 The positive aspect of the k-NN algorithm is simple and has a meaningful notion of (dis)similarity. The first downside of the method is that it is slow -- it needs to check the distance of one point against \textit{all} points in the training set! The second downside is that for a large-dimensional space (i.e., many features; a small 256$\times$256 black-and-white image has already 65\,536 individual pixel features!) the concept of closeness starts to break down. This is called the \textbf{curse of dimensionality}, and basically means that if you put 100 samples on a unit line $x\in[0,1]$, any random point will always lie close to another point, it is in other words `busy' on the line -- but in a $d$-dimensional space $\vec{x}\in[0,1]^d$ filled with 100 samples, most positions are \textit{not} taken and the data-space eventually consists almost entirely of points that are equally apart from each other! We require an exponential growth of training data to keep the feature-space filled with the same density, but that just slows down the algorithm even more...
@@ -975,7 +986,7 @@ The perceptron then initializes with a random hyperplane parameterization $w^T$,
 \end{equation}
 Geometrically (the misclassified red box has $y=-1$, thus its location is subtracted from $w^T$):
 \begin{center}\includegraphics[width=0.9\textwidth,trim={0cm 0cm 3.2cm 2cm},clip]{PerceptronUpdate.png}\end{center}
-This is often illustrated with a graph, which realizes a single \textit{output} of the algorithm:
+The resulting hyperplane is often illustrated with a graph, which realizes a single \textit{output} of the algorithm:
 \begin{center}\includegraphics[width=0.8\textwidth]{perceptrongraph.png}\end{center}
 Note that the figure really just expresses this mathematical operation: $\sign(\vec{w}^T\vec{x}^\bullet_i)$. For a given input $\vec{x}$ and a constant we obtain $\vec{x}^\bullet_i$, and weights $\vec{w}$ are established, we compute the `weighted sum' (the scalar product $\vec{w}^T\vec{x}^\bullet_i$), and a step function is used to see whether the outcome is positive or negative ($\sign(\vec{w}^T\vec{x}^\bullet_i)$).
 
