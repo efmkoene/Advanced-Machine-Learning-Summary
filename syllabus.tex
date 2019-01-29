@@ -931,48 +931,53 @@ The test data-set should {\color{red}{\textbf{\textit{never}}}} be used within t
 
 \newpage
 \section{Machine learning 102: Classification}
-\subsection{Nearest neighbours}
-\subsubsection{k-NN algorithm}
-So, before going into the more statistical notions, a quick overview of the machine learning methods seems appropriate. The first method worth looking at is the ($k$-)nearest neighbour algorithm. The assumption is simple: similar inputs must have similar outputs. The the k-NN algorithm, for any test input $\vec{x}$, assigns it the most common label $y$ amongst its $k$ most similar training inputs. For example, in the below scenario we use $k=3$, yielding two blue points and one red point closest to the tested $\vec{x}$ (where we assign blue the $+1$ label and red the $-1$ label). This results in a majority predicting the label $+1$, which we may assign to $\vec{x}$ correspondingly:
+Before further statistical notions, an overview of the machine learning methods seems appropriate.
+\subsection{k-Nearest neighbours}
+The first method worth looking at is the ($k$-)nearest neighbour algorithm. The assumption is simple: similar inputs must have similar outputs. The the k-NN algorithm, for any test input $\vec{x}$, assigns it the most common label $y$ amongst its $k$ most similar training inputs.
+\begin{testexample}[An illustration in 2-D]
+    We have a training data-set $\mathcal{Z}^\text{train}$ consisting of blue ($+1$) and red ($-1$) points. A new point $\vec{x}$ is compared against the nearest $k=3$ points, and results in a majority predicting the label blue ($+1$), which we may assign to $\vec{x}$ correspondingly:
 \begin{center}\includegraphics[width=0.4\textwidth]{knnfig.png}\end{center}
-
-The positive aspect of the k-NN algorithm is simple and has a meaningful notion of (dis)similarity. The first downside of the method is that it is slow -- it needs to check the distance of one point against \textit{all} points in the training set! The second downside is that for a large-dimensional space (i.e., many features; a small 256$\times$256 black-and-white image has already 65\,536 individual pixel features!) the concept of closeness starts to break down. This is called the \textbf{curse of dimensionality}, and basically means that if you put 100 samples on a unit line $x\in[0,1]$, any random point will always lie close to another point, it is in other words `busy' on the line -- but in a $d$-dimensional space $\vec{x}\in[0,1]^d$ filled with 100 samples, most positions are \textit{not} taken and the data-space eventually consists almost entirely of points that are equally apart from each other! We require an exponential growth of training data to keep the feature-space filled with the same density, but that just slows down the algorithm even more...
-\begin{center}
+\end{testexample}\vspace{-0.3cm}
+{\flushleft The} positive aspect of the k-NN is its simplicity and meaningful notion of similarity learning. The downsides are that its slow and suffers from the \textit{curse of dimensionality}.
+\begin{spexample}[The curse of cats and dogs and dimensionality]
+    Putting 100 samples on a unit line $x\in[0,1]$ means that any random new point lies close to many other points -- it's busy! However, placing 100 samples in a $d$-dimensional space $\vec{x}\in[0,1]^d$ results in a space that's almost completely empty, with many points equally apart from each other!
+    \begin{center}
     \includegraphics[width=0.3\textwidth]{1Dproblem.png}    \includegraphics[width=0.3\textwidth]{2Dproblem.png}    \includegraphics[width=0.3\textwidth]{3Dproblem.png}
 \end{center}
+\end{spexample}\vspace{-0.3cm}
+{\flushleft A} small 256$\times$256 black-and-white image already has already 65\,536 unique pixel \textit{features} -- thus suffering greatly from the curse of dimensionality. It is thus not very useful for `big data', because the algorithm becomes slow and the whole concept of closeness starts to break down!
+
 
 \subsection{Separation by hyperplane}
-We can also think of classification in the following way. Keeping things simple, we assume that there are two features and two states:
-% \begin{figure}[H]
-    % \centering
-    \begin{center}\includegraphics[width=0.5\textwidth,trim={0cm 6cm 10cm 3cm},clip]{perceptron_geometry.jpg}\end{center}
-    % \caption{Caption}
-    % \label{fig:my_label}
-% \end{figure}
-The classification problem is then really nothing more than \textit{finding the line that separates the two classes}! Because the data now lies on either side of the hyperplane, we can obtain this separator and then simply classify features based on their location in this feature space. We can take a more abstract notation, and choose to denote the feature vector $\vec{x}$ as:
-\begin{equation}
-    \vec{x} = \left[ \begin{array}{c} x_2 \\ x_2 \end{array}\right] = \left[ \begin{array}{c} \text{Feature 1} \\ \text{Feature 2} \end{array}\right]
+The second perspective is to assume that we can separate our data using a linear `hyperplane'. For example, the line that describes a linear plane is given by:
+\begin{equation}\label{eq:linearseparator}
+    w_0 + w_1\texttt{Feature 1} + w_2\texttt{Feature 2} = 0 \Longrightarrow     \Big[\begin{array}{ccc} w_0 & w_1 & w_2 \end{array} \Big] \left[ \begin{array}{c} 1 \\ \texttt{Feature 1} \\ \texttt{Feature 2} \end{array} \right] = 0.
 \end{equation}
-The red line that defines the hyperplane as we see it in the figure then looks something like:
+Our classification task thus really comes down to finding the appropriate weights $\vec{w}$.
+\begin{testexample}[An illustration in 2-D]
+    Assuming the presence of 2 features, and 2 classes (black and white), we observe that the following data is easily classified by realizing that either class lies on only one side of the classifier line:
+    \begin{center}\includegraphics[width=0.5\textwidth,trim={0cm 5cm 10cm 3cm},clip]{perceptron_geometry.jpg}\end{center}
+    We can describe the red line with a simple equation:
+    \begin{equation}
+        \texttt{Feature 1} = \text{offset} - \text{slope}\times\texttt{Feature 2},
+    \end{equation}
+    which could also be parameterized as:
+    \begin{equation}
+        \Big[\begin{array}{ccc} -\text{offset} & 1 & \text{slope} \end{array} \Big] \left[ \begin{array}{c} 1 \\ \texttt{Feature 1} \\ \texttt{Feature 2} \end{array} \right] = 0.
+    \end{equation}
+\end{testexample}
+{\flushleft We} choose \textbf{normalized coefficients} $\vec{x}^T=[ 1\ \, \texttt{Feature 1}\ \,\texttt{Feature 2}]$, such that we can write the entire hyperplane of Eq. \eqref{eq:linearseparator} with the following efficient notation:
 \begin{equation}
-    x_1 = \text{offset} - w_2x_2,
+    \vec{w}^T\vec{x} = 0,
 \end{equation}
-where the `offset' defines how much $x_1$ we have when $x_2$ is zero, and $w_2$ defines the negative slope as we change $x_2$! Re-writing `offset' as $w_0$, we would obtain:
+for which the classifier is defined in the following way:
 \begin{equation}
-    x_1 = w_0 - w_2x_2,
+    h(\vec{x}_i) = \begin{cases} \vec{w}^T\vec{x}_i\geq 0 & \text{white class},\\ \vec{w}^T\vec{x}_i<0 & \text{black class}.\end{cases}
 \end{equation}
-or more generally:
-\begin{equation}
-    w_0 + w_1x_1 + w_2x_2 = 0,
-\end{equation}
-which has the inner-product equation:
-\begin{equation}
-    \Big[\begin{array}{ccc} w_0 & w_1 & w_2 \end{array} \Big] \left[ \begin{array}{c} 1 \\ x_1 \\ x_2 \end{array} \right] = 0 \Longleftrightarrow \vec{w}^T\vec{x}^\bullet = 0
-\end{equation}
-Note that we augmented $\vec{x}$ to $\vec{x}^\bullet$ to absorb $w_0$! Note that the only variable here is $\vec{w}$, while $\vec{x}^\bullet$ is the same for any 2-D problem! The parameters of $\vec{w}$ thus define the entire classification problem. The classification, finally, is as simple as:
-\begin{equation}
-    h(\vec{x}_i^\bullet) = \begin{cases} \vec{w}^T\vec{x}_i^\bullet\geq 0 & \text{white class},\\ \vec{w}^T\vec{x}_i^\bullet<0 & \text{black class}.\end{cases}
-\end{equation}
+Note that the concept easily generalizes to higher dimensions which are, perhaps, more difficult to imagine. One simply has the homogenized $\vec{x}\in\mathcal{X}^{d+1}$ for $d$ features, and correspondingly $d+1$ weights in $\vec{w}$ as well. This describes a plane for 3-D data, etc.
+
+
+
 
 % \subsection{Classification algorithms}
 \subsubsection{Perceptron}
@@ -980,78 +985,121 @@ The perceptron (\textsc{Rosenblatt}, 1957) is the first machine-learning algorit
 \begin{equation}
     \mathcal{Y} = \{-1,+1\}.
 \end{equation}
-The perceptron then initializes with a random hyperplane parameterization $w^T$, takes a misclassified sample $(\vec{x}_i,y_i)$ (when $y_i\vec{w}^T\vec{x}_i\leq 0$) and adds it to the hyperplane with rule:
+The perceptron then initializes with a random hyperplane parameterization $\vec{w}$, takes a misclassified sample $(\vec{x}_i,y_i)$ \textit{(found when the sample has: $y_i\vec{w}^T\vec{x}_i\leq 0$, because when our hyperplane is correct, we have $++\geq 0$ or $--\geq 0$)} and we add the required correction to the hyperplane in the following way:
 \begin{equation}
-    w^T_\text{updated} = w^T + y_i \vec{x}_i^T
+    \vec{w}_\text{updated} = \vec{w} + y_i \vec{x}_i.
 \end{equation}
-Geometrically (the misclassified red box has $y=-1$, thus its location is subtracted from $w^T$):
-\begin{center}\includegraphics[width=0.9\textwidth,trim={0cm 0cm 3.2cm 2cm},clip]{PerceptronUpdate.png}\end{center}
-The resulting hyperplane is often illustrated with a graph, which realizes a single \textit{output} of the algorithm:
-\begin{center}\includegraphics[width=0.8\textwidth]{perceptrongraph.png}\end{center}
-Note that the figure really just expresses this mathematical operation: $\sign(\vec{w}^T\vec{x}^\bullet_i)$. For a given input $\vec{x}$ and a constant we obtain $\vec{x}^\bullet_i$, and weights $\vec{w}$ are established, we compute the `weighted sum' (the scalar product $\vec{w}^T\vec{x}^\bullet_i$), and a step function is used to see whether the outcome is positive or negative ($\sign(\vec{w}^T\vec{x}^\bullet_i)$).
-
+Iterating these updates always converges to a separating hyperplane, if the data is linearly separable!
+\begin{testexample}[Graphical example in 2-D]
+    Geometrically, the misclassified red box gives an update $y_i\vec{x}_i=-\vec{x}_i$, which really just means that we rotate the separating line $\vec{w}$ such that it doesn't misclassify $\vec{x}_i$ anymore:
+    \begin{center}\includegraphics[width=0.8\textwidth,trim={0cm 0cm 3.2cm 2cm},clip]{PerceptronUpdate.png}\end{center}
+\end{testexample}
+\begin{spexample}[Illustrating neural networks as graphs]
+    The resulting classifier is sometimes illustrated with a graph as follows:
+    \begin{center}\includegraphics[width=0.8\textwidth]{perceptrongraph.png}\end{center}
+    Note that the figure really just expresses this mathematical operation: $\sign(\vec{w}^T\vec{x})$. For a given homogenized feature vector $\vec{x}$ and weights $\vec{w}$, we compute the `weighted sum' (the scalar product $\vec{w}^T\vec{x}$), and a step function is used to see whether the outcome is positive or negative ($\sign(\vec{w}^T\vec{x})$).
+\end{spexample}
 \begin{testexample}[Handwritten number recognition]
     The method appeared to work rather well for recognition of handwriting also, considering every pixel as an entry of the vector $\vec{x}$, which multiplied with the weights $\vec{w}$ separate a 0 from a 7:
     \begin{center}\includegraphics[width=1\textwidth]{numberrecog.png}\end{center}
     The weights are illustrated in red outline, on top of the `7' fourth of the right. You see that you can discern a white 0 and a black 7 in the weight. Thus multiplying a white zero image with the white `0' weight, and summing over the result, gives a positive sum; while multiplying a white 7 with the black `7' weight sums to a negative result. Thus: the two data are separated by their score after summation between image and weight!
-\end{testexample}
+\end{testexample}\vspace{-0.5cm}
 
 
 
-\subsubsection{Support vector machines}
-The perceptron doesn't guarantee that it finds a \textit{good} separating hyperplane; in fact there is an infinite number of hyperplane variations that all work. The support vector machine (\textsc{Vapnik \& Chervonenkis}, 1963) tries to obtain the separating hyperplane that \textit{maximizes} the distance (`margin') between the two clusters. In practice, that means that we can draw two parallel lines (one running through two points of a class, and another one through a single point from the other class, called the `support vectors'). The line exactly in-between the parallel vectors gives the separator with the largest possible margin:
-\begin{center}\includegraphics[width=0.47\textwidth]{SVM.png}\end{center}
+\subsubsection{Support vector machines (SVM)}
+The perceptron algorithm always converges, but its result is different every time, and there is no guarantee that it finds the best separating hyperplane. The support vector machine (\textsc{Vapnik \& Chervonenkis}, 1963) tries to obtain the separating hyperplane that \textit{maximizes} the distance (`margin') between the two clusters. This method makes sure we always find the same classifier based on the data, and furthermore generalize as well as possible!
+\begin{spexample}[Support vectors]
+    In practice, it means that that our separator is defined by just 3 data-points: 2 from one class and 1 from the other. These three points are called the `support vectors'. 
+    The line exactly in-between the parallel lines through the support vectors gives the separator with the largest possible margin:
+    \begin{center}\includegraphics[width=0.43\textwidth]{SVM.png}\end{center}
+\end{spexample}
 
 \subsubsection{The kernel trick}
-The ability to make linear separation boundaries only is rather limiting. But extending the previous methods to other separation boundaries is difficult -- they are so inherently based on ideas of linearity. The trick that came about is the `Kernel method', by which the data is transformed into another space, after which the data becomes linearly separable. One example keeps the features in the same dimensions:
-\begin{center}
-    \includegraphics[width=0.6\textwidth]{kernel.png}
-\end{center}
-but a more common example is to add an additional dimension to the feature space, allowing strongly non-linear feature maps:
-\begin{center}
-    \includegraphics[width=0.6\textwidth]{kernel-method-nonlinear-svm.png}
-\end{center}
-The crucial portion is that the SVM optimization minimizes a quadratic term that involves the scalar product of the data $\vec{x}^T\vec{x}$, and its coordinate transformed version is $\phi(\vec{x})^T\phi(\vec{x})$. To compute the latter term requires expanding the vector into a usually higher-dimensional space $\phi(\vec{x})$, and then the scalar product collapses this back to a scalar again. The `kernel method', on the other hand, never leaves the original feature space explicitly, by computing the scalar product of the transformations beforehand, $K=\phi(\cdot)^T\phi(\cdot)$. This allows us to obtain the scalar-product immediately through $K(\vec{x})$! Effectively, as long as you choose an appropriate kernel (Gaussian radial basis functions are the most popular one, which transform into an \textit{infinite}-dimensional space!) you can now also fit non-linear clusters extremely rapidly with your linear algorithm.
+The ability to make linear separation boundaries only is rather limiting. But extending the previous methods to other separation boundaries is difficult -- the methods are so inherently based on ideas of linearity. The solution that came about is the `Kernel method', by which the data is transformed into another space, after which the data becomes linearly separable. Rather than finding the hyperplane $\vec{w}^T\vec{x}$ we require the optimal hyperplane for the transformed data:
+\begin{equation}
+    \vec{w}^T\phi(\vec{x})=0.
+\end{equation}
+\vspace{-0.5cm}
+\begin{testexample}[Non-linear transformation (1)]
+    We may simply transform the data, after which they become linearly separable (on the right):
+    \begin{center}\includegraphics[width=0.5\textwidth]{kernel.png}\end{center}
+\end{testexample}
+\vspace{-0.15cm}
+\begin{testexample}[Non-linear transformation (2)]
+    Sometimes, the data is better separable in dimensions higher than the original input space:
+    \begin{center}\includegraphics[width=0.5\textwidth]{kernel-method-nonlinear-svm.png}\end{center}
+\end{testexample}
+\vspace{-0.3cm}
+{\flushleft The} crucial portion of the kernel trick is that we tend require the scalar product $\vec{x}^T\vec{x}$ to find the optimal support vector machine solution. The transformed version is:
+\begin{equation}
+    \phi(\vec{x})^T\phi(\vec{x}) \in \mathbb{R}.
+\end{equation}
+Note that $\phi$ may transform $\vec{x}$ into many dimensions, such that the above scalar product is very expensive to evaluate! However, if we find a closed-form solution to compute this scalar product, we have a \textit{kernel} that never actually has to expand to higher dimensions:
+\begin{equation}
+    K(\vec{x}) = \phi(\vec{x})^T\phi(\vec{x}).
+\end{equation}
+This allows us to obtain the scalar-product immediately through $K(\vec{x})$! Effectively, as long as you choose an appropriate kernel (Gaussian radial basis functions are the most popular one, which transform into an \textit{infinite}-dimensional space!) you can now also fit non-linear clusters extremely rapidly with your linear algorithm.
+
+\newpage
+\subsection{Decision Trees \& Ensemble models}
+Why use only \textit{one} hyperplane? This is the idea behind \textit{decision trees}, which can be trained and evaluated rapidly, which makes them interesting in practice! We obtain a classifier which goes through a binary tree, testing at every node whether some feature is above or below a given value. 
+\begin{testexample}[Decision tree]
+    The figure below shows a decision tree (on the right) that classifies the data (on the left) perfectly.
+    \begin{center}\includegraphics[width=0.6\textwidth]{decisiontree.png}\end{center}
+\end{testexample}
+%
+{\flushleft Rather} than using on a single decision tree, it often pays off to use \textbf{ensemble methods}. In such a case we often train multiple decision trees, and classify by a (weighted) majority vote:
+\begin{equation}
+    y_i = \sign( \alpha_1 h_1(\vec{x}_i) + \alpha_2h_2(\vec{x}_i) + \dots ).
+\end{equation}
+\begin{testexample}[Ensemble methods]
+    In the example below, you see a Random Forest (training many deep decision trees) and AdaBoost (training many one-level decision trees) classifying data, with the right-bottom showing the accuracy (higher is better). These ensemble methods outperform the simple decision tree, because pooling multiple different classifiers makes them less likely to overfit.
+    \begin{center}\includegraphics[width=0.6\textwidth]{ml-classifiers.png}\end{center}
+\end{testexample}
 
 \newpage
 \subsection{Probabilistic models}
-We can take yet another look at the problem, from probabilistic perspective. Assume that the data $\mathcal{Z}^\text{train}=(\mathcal{X}^\text{train}\times\mathcal{Y}^\text{train})$ can be explained by a certain distribution, parameterized with $\theta$. We can then fit the distribution to our data, and then predict any point by evaluating the simple rules of probability. Compared to the previous two methods (nearest neighbour and separating hyperplane), we now actually obtain the computed \textit{probability} that any point belongs to either of the clusters!
+The final perspective takes a probabilistic approach. Assume that the data $\mathcal{Z}^\text{train}$ can in some way be explained by a distribution parameterized with $\theta_j$ (one for each class $j$). The machine learning problem now reduces to finding the appropriate $\theta_j$ that explains the data. Compared to the previous approaches, we now actually obtain the probability of any new point belonging to either of the classes!
+
 
 \subsubsection{Maximum Likelihood Estimation (MLE)}
-The rule is simple. For training, we try to find the best parameter that explains the data. So for the parameter $\theta$, we express the likelihood of finding any combination (i.e., joint probability distribution) of data $\mathcal{Z}^\text{train}$ and parameter $\theta_j$ (one parameter for each class $j$), and we want to find the $\theta_j$ that maximizes this probability:
+In this case we are interested in maximizing the likelihood of the training data, given $\hat{\theta}_j$:
 \begin{equation}
     \hat{\theta}_j\in\argmax_\theta \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j) = \argmax_\theta \log\left( \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j) \right).
 \end{equation}
-Once we have found the $\theta$ that optimally fits the distributions in the data, we can create plots like below which consists of multivariate Gaussians:
-\begin{center}
-    \includegraphics[width=0.6\textwidth,trim={0.5cm 0.35cm 0 0},clip]{MLE_class.jpg}
-\end{center}
-Because we now know the underlying distributions, we can simply find the probability of any new data point, and for example assign the new point to the most probable class $j$:
+Because we now have an explicit parameterization of the data distribution(s), we simply classify new points by assigning them to the most probable class, i.e., that one that gives the highest probability to the current point:
 \begin{equation}
-    \argmax_j \mathbb{P}(\vec{x}|\hat{\theta}_j).
+    y_i = \argmax_j \mathbb{P}(\vec{x}_i|\hat{\theta}_j).
 \end{equation}
-Finding the optimal $\hat{\theta}$ is actually a fairly hard problem to solve directly, but iterative methods like the `Expectation and Maximization' (EM) algorithm exist to obtain these methods instead. This method  When using strictly Normal distributions, the obtained model is called a `Gaussian Mixture Model' (GMM).
+Finding the optimal $\hat{\theta}_j$ is actually a fairly hard problem to solve directly, but can be done anyhow. When using strictly Normal distributions, the obtained model is called a `Gaussian Mixture Model' (GMM).
+\begin{testexample}[Gaussian Mixture Model]
+    After the fitting procedure, we then end up with Gaussians in our feature space with Gaussian parameters $\theta_j=\{\mu_j,\bm{\Sigma}_j\}$ for 6 different classes all with different centers of mass and variance in the feature space:
+    \begin{center}\includegraphics[width=0.6\textwidth,trim={0.5cm 0.35cm 0 0},clip]{MLE_class.jpg}\end{center}
+\end{testexample}
 
-\subsubsection{Naive Bayesian}
-The Naive Bayesian classifier assumes that there is no covariance between the features. This simplifies the method and is furthermore rather robust in practice! You can see it in this plot because the Gaussians are aligned with the grid, not allowed to rotate as we saw on the previous page.
-\begin{center}\includegraphics[width=0.8\textwidth]{naivegaussian.png}
-\end{center}
-
-
+\subsubsection{Naive Bayes Classifier}
+The Naive Bayesian classifier assumes that all features are independent. This simplifies the method (no joint probabilities are required anymore) and is furthermore rather robust in practice!
+\begin{testexample}[Naive Bayes model]
+    You can see it in this plot because the Gaussians are aligned with the features (i.e., grid), rather than allowed to rotate as we saw on the previous page.
+    \begin{center}\includegraphics[width=0.6\textwidth]{naivegaussian.png}\end{center}
+\end{testexample}
+\vspace{-0.5cm}
 
 \subsubsection{Maximum a posteriori (MAP)}
-Rather than optimizing for the likelihood only, we can find the a posteriori solution instead, which happens to give us a way to weigh specific distributions favourably or not:
+Rather than only optimizing the likelihood as in MLE, we can compute the $\argmax_{\theta_j}$ for the full Bayesian posterior:
 \begin{equation}
-    \hat{\theta}_j\in\argmax_{\theta_j} \mathbb{P}(\theta_j|\mathcal{Z}^\text{train}) = \argmax_{\theta_j} \frac{\mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j)}{\mathbb{P}(\mathcal{Z}^\text{train})} = \argmax_{\theta_j} \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j),
+    \mathbb{P}(\theta_j|\mathcal{Z}^\text{train}) = \frac{\mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j)}{\mathbb{P}(\mathcal{Z}^\text{train})} \propto \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j),
 \end{equation}
-the latter form follows because there is no dependency on $\theta$ in the evidence, i.e., it plays no role in the optimization. The resulting form thus weighs the probability we saw earlier in the MLE method, by the probability of observing $\theta_j$ at all! This prior $\mathbb{P}(\theta_j)$ is independent of the data and we can consider it to be a form of \textbf{regularization}: when the parameter $\theta_j$ deviates much from what we believe is reasonable, we need a lot of evidence to convince us it's right.
+we drop the evidence (denominator) because it is unaffected by $\theta_j$! Note that the resulting form is thus the MLE objective weighed by the prior $\mathbb{P}(\theta_j)$. This prior is independent of the data and we can consider it to be a form of \textbf{regularization}: when the parameter $\theta_j$ deviates much from what we believe is reasonable, we need a lot of evidence to convince us it's right. The MAP thus reduces the MLE if we assume a uniform prior for the parameters $\theta_j$!
 
-The MAP thus reduces the MLE if we assume a uniform prior for the parameters $\theta_j$!
-
-\begin{mymathbox}[ams align, title={MLE \& MAP}, colframe=blue!30!black, center title]
-    \text{MLE:}\quad & \argmax_{\vec{w}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w})=\argmax_{\vec{w}} \prod_{n=1}^N \mathbb{P}(y_i|x_i,\vec{w})= \argmax_{\vec{w}}\prod_{n=1}^N \mathcal{N}(\vec{w}^T\vec{x},\sigma^2), \\
-    \text{MAP:}\quad & \argmax_{\vec{w}}\mathbb{P}(\vec{w}|\mathcal{Z}^\text{train})\propto \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w}))\mathbb{P}(\vec{w}).
+\begin{mymathbox}[ams align, title={MLE, Naive Bayes \& MAP}, colframe=blue!30!black, center title]
+    \text{MLE:}\quad & \argmax_{\vec{w}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w})=\argmax_{\vec{w}} \prod_{i=1}^N \mathbb{P}(y_i|x_i,x_{i+1},\dots,x_n,\vec{w}) \\
+    \text{Naive Bayes:}\quad & \argmax_{\vec{w}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w})=\argmax_{\vec{w}} \prod_{i=1}^N \mathbb{P}(y_i|x_i,\vec{w}) \\
+    \text{MAP:}\quad & \argmax_{\vec{w}}\mathbb{P}(\vec{w}|\mathcal{Z}^\text{train})\propto \argmax_{\vec{w}}\prod_{i=1}^N \mathbb{P}(y_i|x_i,x_{i+1},\dots,x_n,\vec{w})\mathbb{P}(\vec{w}).
 \end{mymathbox}
+
+
 
 % \begin{spexample}[MLE coin throws]
 %     Assume we flip the same coin repeatedly, we have a constant $\mathcal{X}^\text{train}$ but a binary outcome $\mathcal{Y}^\text{train}$. For example, $\mathcal{Y}^\text{train}=\{H,T,T,H,H,H,T,T,T,T\}$. We thus know a binomial distribution applies:
@@ -1063,121 +1111,130 @@ The MAP thus reduces the MLE if we assume a uniform prior for the parameters $\t
 
 \newpage
 \section{Machine learning 103: Regression}
-\subsection{Least-squares}
-If we assume that a linear regression relation exists (knowing that with the kernel trick from above, we can make things work for non-linear models also), we assume that input feature $\vec{x}$ has $d$ dimensions:
+We'll do a quick run-down of three typical regression perspectives/algorithms.
+\subsection{Linear regression}
+From the above section with hyperplanes, we may remember that we can put our features in homogenized coordinates $\vec{x}=[1\ \,\texttt{Feature 1}\ \,\texttt{Feature 2}\ \,\dots]$, to be able to write any linear regression solution (2-D line, 3-D plane, \dots) as:
 \begin{equation}
-    y = w_0 + \sum_{j=1}^d x_j w_j,
+    y = \vec{w}^T\vec{x}=\vec{x}^T\vec{w}.
 \end{equation}
-or using homogeneous coordinates again ($x^\bullet=[1\ x]^T$), the linear function has a familiar form:
-\begin{equation}
-    y = \vec{w}^T\vec{x}^\bullet = \vec{x}^{\bullet T}\vec{w}.\label{eq:standardlinearform}
-\end{equation}
-We now again have various choices of methods that can give us the optimal weights $w$. For example, the \textbf{least-squares method} (or `residual sum of squares') tries to obtain, based on all $N$ pairs of $(x_i,y_i)$, the optimal weights:
-\begin{equation}
-    \widehat{w} = \argmin_{\vec{w}} \sum_{i=1}^N (y_i - \vec{w}^T\vec{x}^\bullet_i)^2 = \argmin_{\vec{w}} (\mathbf{y}-\mathbf{\vec{x}}\vec{w})^2 = \argmin_{\vec{w}} \norm*{\mathbf{y}-\mathbf{\vec{x}}\vec{w}}_2^2,
-\end{equation}
-with vector $\mathbf{y}=[y_1\ y_2\ \dots\ y_N]^T$ and matrix $\mathbf{\vec{x}}=[\vec{x}_1^{\bullet}\ \vec{x}^{\bullet}_2\ \dots\ \vec{x}^{\bullet}_N]^T$ this has the optimal solution:
-\begin{equation}
-    \widehat{w} = (\mathbf{\vec{x}}^{T}\mathbf{\vec{x}})^{-1} \mathbf{\vec{x}}^{T}\mathbf{y}.
-\end{equation}
-There is much more to say about these solutions, but I'll leave that for later.
-
-\begin{spexample}[Regularization models]
-    If we think we know more about $\widehat{w}$, i.e., we have a prior, we can regularize the inversion. For example, with \textbf{Ridge Regression} we simultaneously triy to minimize the `energy' in the misfit, as well as in the weights vector itself:
+Our challenge thus lies in finding the weights $\vec{w}$. Note that, as with the classification, we can use the Kernel trick to work with a non-linear transformations of our features $\phi(\vec{x})$, such that the non-linear data still allow a linear regression model.
+\begin{spexample}[Ordinary least squares]
+    Creating vector $\vec{y}=[y_1\ y_2\ \dots\ y_N]^T$ and matrix $\mathbf{X}=[\vec{x}_1\ \, \vec{x}_2\ \,\dots\  \,\vec{x}_N]^T$, we can write down the solution for all inputs $\vec{X}$:
     \begin{equation}
-        \widehat{w} = \argmin_{\vec{w}} \norm*{\mathbf{y}-\mathbf{\vec{x}}\vec{w}}_2^2 + \lambda\vec{w}^T\vec{w} = \argmin_{\vec{w}} \norm*{\mathbf{y}-\mathbf{\vec{x}}\vec{w}}_2^2 + \lambda\norm*{\vec{w}}_2^2,
+        \vec{y} = \mathbf{X}\vec{w}.
     \end{equation}
-    which has the explicit solution:
+    We find the optimal \textbf{least-squares} solution by minimizing the residual sum of squares:
     \begin{equation}
-        \widehat{w} = (\mathbf{\vec{x}}^T\mathbf{\vec{x}}+\lambda\mathbf{I})^{-1}\mathbf{\vec{x}}^T\mathbf{y}.
+        \hat{\vec{w}} = \argmin_{\vec{w}} \norm*{\vec{y}-\mathbf{X}\vec{w}}^2_2.
     \end{equation}
-    
-    Conversely, in \textbf{LASSO} (Least Absolute Shrinkage and Selection Operator) regression, we simultaneously try to minimize the `energy' in the misfit and furthermore try to achieve a sparse weights vector:
+    The optimal solution is well-known to be:
     \begin{equation}
-        \widehat{w} = \argmin_{\vec{w}} \norm*{\mathbf{y}-\mathbf{\vec{x}}\vec{w}}_2^2 + s\norm*{\vec{w}}_1^2.
+        \hat{\vec{w}} = (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\vec{y}.
     \end{equation}
-    There is no explicit solution for this (often encountered in engineering problems) model, but efficient optimization techniques exist to solve this problem. The weights from the LASSO optimization usually result in only a few non-zero coefficients.
+    We then predict any new point with the least-squares regression model:
+    \begin{equation}
+        y_i = \vec{x}_i^T (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\vec{y} =  \left((\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\vec{y}\right)^T\vec{x}_i.
+    \end{equation}
 \end{spexample}
-We can now write down the linear, least-squares regression model by inserting the optimal solution in eq. \eqref{eq:standardlinearform} to predict any new solution:
-\begin{equation}
-    \underbrace{y}_\text{new prediction} = \underbrace{\left((\mathbf{\vec{x}}^{T}\mathbf{\vec{x}})^{-1} \mathbf{\vec{x}}^{T}\mathbf{y}\right)^T}_\text{training data}\underbrace{\vec{x}^\bullet}_\text{new data}.
-\end{equation}
+\begin{spexample}[Regularization models]
+    If we think we know more about $\hat{\vec{w}}$, i.e., we have a prior, we can regularize the inversion. For example, desiring little energy in the least-squares solution vector $\hat{\vec{w}}$:
+    \begin{align}
+        \textbf{Ridge regression:}\quad&\hat{\vec{w}} = \argmin_{\vec{w}} \norm*{\vec{y}-\mathbf{X}\vec{w}}_2^2 + \lambda\norm*{\vec{w}}_2^2,\\
+        \textbf{LASSO:}\quad&\widehat{w} = \argmin_{\vec{w}} \norm*{\vec{y}-\mathbf{X}\vec{w}}_2^2 + \lambda\norm*{\vec{w}}_1^2.
+    \end{align}
+    The ridge regression solution has an explicit solution:
+    \begin{equation}
+        \hat{\vec{w}} = (\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^T\vec{y},
+    \end{equation}
+    but no explicit solution exists for LASSO -- there we require more computationally intensive optimization techniques to find a solution. The weights from the LASSO optimization usually result in only a few non-zero coefficients, thus are sparse. Both regularization strategies tend to make the models much more stable to compute, and ensure that the solution is not overfitting.
+\end{spexample}
 
 \subsection{Bayesian regression}
-We make a slightly altered assumption by explicitly incorporating  a noise coefficient $\epsilon$ from a parameterized distribution into our regression model, for example following a normal distribution:
+With Bayesian regression we remain close to linear regression, but quantify the uncertainties in the approximation. We assume that our solution may contain errors, for example normally distributed:
 \begin{equation}
-    y = \vec{x}^{\bullet T}\vec{w} + \epsilon\quad\quad\text{with }\epsilon \sim \mathcal{N}(\epsilon|0,\sigma).
+    y = \vec{x}^T\vec{w} + \epsilon\quad\quad\text{with }\epsilon \sim \mathcal{N}(0,\sigma^2).
 \end{equation}
-This can also be written as a probability function:
+The probabilistic model thus assumes that $y$ is \textit{drawn from a distribution}:
 \begin{equation}
-    \mathbb{P}(y|\vec{x},\vec{w},\sigma) = \mathcal{N}(y|\vec{x}^{\bullet T}\vec{w},\sigma), \Longleftrightarrow y \sim \mathcal{N}(\vec{x}^{\bullet T}\vec{w},\sigma),\label{eq:drawingy}
+    y \sim \mathcal{N}(\vec{x}^T\vec{w},\sigma^2),\label{eq:drawingy}
 \end{equation}
-that is, the `mean' of every $y$ is given by the linear relation we saw in eq. \eqref{eq:standardlinearform}, but it is polluted with a normally distributed variance term $\sigma^2$. For $\sigma\to 0$ this is thus a straight line, but for larger $\sigma$, we obtain a whole range of possible realizations $y$, depending on the exact $y$ drawn from this normal distribution! We thus also obtain a \textit{range} of possible linear fits based on the data -- not necessarily the same as the ordinary least-squares (OLS) solution!
-\begin{center}\includegraphics[width=0.5\textwidth]{bayeslinearregression.png}\end{center}
+that is, the `mean' of every drawn $y$ is given by the linear regression model, but it is polluted with a variance $\sigma^2$. So, how do we do this exactly? It turns out that we typically end up with similar solutions as ridge regression or LASSO; but also obtain the variance in its variables. For example, assuming $\vec{w}$ has a variance of $\lambda\mathbf{I}$, we end up with the following ridge regression models being drawn:
+\begin{equation}
+    \vec{w} \sim \mathcal{N}(\vec{w}|\underbrace{(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^T\vec{y}}_{\mu_w},\underbrace{(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}}_{\bm{\Sigma_w}}),
+\end{equation}
+where $\mu_w$ is the average ridge regression model, and $\bm{\Sigma}_w$ its variance. Thus, based on the data and our prior, we also find out how likely it is to arrive at our model!
 
-
-However -- we don't know the weights $\vec{w}$ yet. But we can find these as a data-conditional probability. For example, assuming the ridge-regression prior on $\vec{w}$ given in the previous section, we assume a multivariate distribution (dimension $d$, the size of the weights vector):
+Using the Kernel trick we can, furthermore, stray away from strictly linear regression, assuming a transform is applied to the features such that linear regression is possible:
 \begin{equation}
-    \mathbb{P}(\vec{w}|\lambda\mathbf{I}) = \mathcal{N}(\vec{w}|0,(\lambda\mathbf{I})^{-1}) = \frac{\sqrt{\lambda^d}}{\sqrt{(2\pi)^d}}e^{-\frac{\lambda \vec{w}^t\vec{w}}{2}}.
-\end{equation}
-Then we can use Bayes' theorem to obtain the posterior, given the data:
-\begin{equation}
-    \mathbb{P}(\vec{w}|\mathbf{\vec{x}},\mathbf{y},\lambda\mathbf{I}) = \frac{\mathbb{P}(\mathbf{\vec{x}},\mathbf{y}|\vec{w},\lambda\mathbf{I})\mathbb{P}(\vec{w}|\lambda\mathbf{I})}{\mathbb{P}(\mathbf{\vec{x}},\mathbf{y}|\lambda\mathbf{I})} = \mathcal{N}(\vec{w}|\underbrace{(\mathbf{\vec{x}}^T\mathbf{\vec{x}}+\lambda\mathbf{I})^{-1}\mathbf{\vec{x}}^T\mathbf{y}}_{\mu_w},\underbrace{(\mathbf{\vec{x}}^T\mathbf{\vec{x}}+\lambda\mathbf{I})^{-1}}_{\Sigma_w}),
-\end{equation}
-that is, we compute how likely it is to arrive at model $\vec{w}$ given the data and an estimate of the form of $\vec{w}$. The solution we find is that there is an average $\vec{w}$ given by $\mu$ which equals the Ridge Regression solution, but additionally there is a variance of additional possible $\vec{w}$ values with the given variance $\Sigma$. That is, we can draw realizations of $\widehat{w}$ from the found probability distribution:
-\begin{equation}
-    \widehat{w} \sim \mathcal{N}(\vec{w}|\mu_w,\Sigma_w).
+    y = \vec{w}^T\phi(\vec{x})+\epsilon\quad\quad\text{with }\epsilon \sim \mathcal{N}(0,\sigma^2).
 \end{equation}
 
-Using the Kernel trick we can, furthermore, stray away from strictly linear regression, assuming the data is transformed:
-\begin{equation}
-    y = \vec{w}^T\phi(x)+\epsilon.
-\end{equation}
-\begin{center}\includegraphics[width=0.5\textwidth]{bishop.png}\end{center}
+\begin{testexample}[Ordinary least squares vs. Bayesian regression]
+    Bayes regression thus provides a \textit{range} of possible linear fits based on the data -- not only the single ordinary least squares (OLS) solution! On the left-hand side we see a linear model, on the right-hand side we use the kernelized Bayes' regression. In both situations, you see a \textit{range} of solutions shaded, usually representing one or two standard deviations from the mean. The line in its center is the least squares solution. We thus find a range of possible model realizations, based on the data!
+    \vspace{0.1cm}
+    \begin{center}\includegraphics[width=0.48\textwidth]{bayeslinearregression.png} \includegraphics[width=0.48\textwidth]{bishop.png}\end{center}
+\end{testexample}
 
-\begin{mymathbox}[ams align, title={Regression models (so far)}, colframe=blue!30!black, center title]
-    y & = \vec{w}^T\vec{x}+\epsilon,&&\text{Least-squares, ridge regression, linear Bayes regression},\\
-    y & = \vec{w}^T\phi(\vec{x})+\epsilon&&\text{Kernelized regression}
-\end{mymathbox}
+% \begin{mymathbox}[ams align, title={Regression models (so far)}, colframe=blue!30!black, center title]
+%     y & = \vec{w}^T\vec{x}+\epsilon,&&\text{Least-squares, ridge regression, linear Bayes regression},\\
+%     y & = \vec{w}^T\phi(\vec{x})+\epsilon&&\text{Kernelized regression}
+% \end{mymathbox}
 
 
-\subsection{Gaussian process}
-In the previous section, eq. \eqref{eq:drawingy}, we assumed that each $y$ was drawn from a linear line with some variability in exact $y$ value. In the Gaussian process, we assume that each output $y_i$ is potentially correlated with each other output $y_j$. Furthermore, we allow the regression model to be absolutely \textit{anything}:
-\begin{equation}
-    y = f(\vec{x})+\epsilon.
-\end{equation}
-Basically, the idea is that we are almost \textbf{model-independent}, make no choice for the data at all ($\vec{w}$ and $\phi$), and want to make predictions based on the actual training data itself. Remembering the MLE and MAP solutions from classification before, we now have a look with a Bayesian hat:
-\begin{mymathbox}[ams align, title={MLE \& MAP}, colframe=blue!30!black, center title]
-    \text{MLE:}\quad & \argmax_{\vec{w}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w})=\argmax_{\vec{w}} \prod_{n=1}^N \mathbb{P}(y_i|x_i,\vec{w})= \argmax_{\vec{w}}\prod_{n=1}^N \mathcal{N}(\vec{w}^T\vec{x},\sigma^2), \\
-    \text{MAP:}\quad & \argmax_{\vec{w}}\mathbb{P}(\vec{w}|\mathcal{Z}^\text{train})\propto \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w}))\mathbb{P}(\vec{w}),\\
-    \text{GP:}\quad& \mathbb{P}(y_\text{prediction}|x_\text{new},\mathbb{Z}^\text{train})=\int_{\vec{w}} \mathbb{P}(y|x,\vec{w})\mathbb{P}(\vec{w}|\mathcal{Z}^\text{train})\di\vec{w}. 
-\end{mymathbox}
-Hence, we marginalize out the model completely, with the last term equaling the one we saw in MAP. You never have to find a single set of parameters that represent the model for you, because you marginalize over all possible models in the universe! We don't commit to a single model, we simply assume \text{all} possible lines that we can draw are possible models, and we let the data constrain the type of models that actually work for our data! In the figure below, we thus have some \textit{priors} (all possible models in the universe, only assuming some smoothness between data points), then some draws from the \textit{posterior} (all possible models in the universe from the prior that cross through the known data at $x=\{2,4,6,7,9\}$), which we can also graph in the way that is done in the right-most picture that shows the standard-deviation of those models:
-\begin{center}\includegraphics[width=0.8\textwidth]{Gaussian_Process_Regression.png}\end{center}
-The only required input is thus the \textit{covariance} or \textit{Kernel} function that expresses the smoothness of the prior models -- i.e., how smooth or spiky are the lines that we consider in our prior. Check out the demos: \url{https://youtu.be/R-NUdqxKjos?t=2829} and  \url{https://youtu.be/BzHJ57QCdVo?t=945}.
+\subsection{Gaussian process regression}
+For the Gaussian process, we take a \textit{very} different perspective at the problem, more akin to nearest neighbours. We assume that $\mathcal{Z}^\text{train}$ can be explained by \textit{all} the possible models in the universe that fit our current data-points. The only prior we choose is how far away we are willing to extrapolate information from known data-points to unknown data-points.
 
-The great thing is that the entire formulation of the Gaussian Process (GP) in the box above is just integrating over multiplications of Gaussians, so we know that the solution is also a Gaussian itself. Therefore, any point in the solution space is simply the result of a (multivariate) Gaussian fitting procedure, where we assume that for any known data-point, it tells us something about the values corresponding to data close by. Hence, in the figure you see that close to any data-point, the fit is extremely good, but gets more uncertain further away. 
+We thus make no choice for a linear model $\vec{w}$ or transformation $\phi$. We simply assume \text{all} possible lines that we can draw are possible models, and we let the data constrain the type of models that actually work for our data!
+\begin{testexample}[Gaussian process regression]
+    In the figure below, we have some \textit{priors} (all possible models in the universe, only assuming that data is correlated in $x$ and $y$ directions to a certain point, such that the lines are smooth), then some data comes in and we must draw from the \textit{posterior} (all possible models in the universe from the prior that cross through the known data at $x=\{2,4,6,7,9\}$), which we can also graph in the way that is done in the right-most picture that shows the standard-deviation of all the models:
+    \begin{center}\includegraphics[width=0.8\textwidth]{Gaussian_Process_Regression.png}\end{center}
+    {\flushleft The} only required user input is thus the \textit{covariance} or \textit{kernel} that expresses how well we can extrapolate away from given points, thus how smooth the priors are. Check out the demos: \url{https://youtu.be/R-NUdqxKjos?t=2829} and  \url{https://youtu.be/BzHJ57QCdVo?t=945}. From the right-hand side figure it is clear where we should get new samples (in the most uncertain place, where the grey area is largest) to learn most new information -- this is a powerful, it tells us where we are more or less uncertain!
+\end{testexample}
 
 In other words, we assume that our `known' values $\mathcal{Y}^\text{train}$, as well as our latest new value $y_N$ are drawn from a multivariate Gaussian distribution:
 \begin{equation}
-    \left[ \begin{array}{c} \mathcal{Y}_1 \\ \mathcal{Y}_2 \\ \vdots \\ y_N \end{array} \right] \sim \mathcal{N}\left( \mathbf{y} \Bigg| \mathbf{0}, \left[ \begin{array}{cccc} k_{1,1}+\sigma^2 & k_{1,2} & \dots & k_{1,N} \\ k_{2,1} & k_{2,2}+\sigma^2 & \dots & k_{2,N} \\ \vdots & \vdots & \ddots & \vdots \\ k_{N,1} & k_{N,2} & \dots & k_{N,N}+\sigma^2 \end{array} \right] \right)\label{eq:gppdistribution}
+    \left[ \begin{array}{c} {y}_1 \\ {y}_2 \\ \vdots \\ y_N \end{array} \right] \sim {N}\left( \left[ \begin{array}{c} {y}_1 \\ {y}_2 \\ \vdots \\ y_N \end{array} \right], \left[ \begin{array}{cccc} k_{1,1}+\sigma^2 & k_{1,2} & \dots & k_{1,N} \\ k_{2,1} & k_{2,2}+\sigma^2 & \dots & k_{2,N} \\ \vdots & \vdots & \ddots & \vdots \\ k_{N,1} & k_{N,2} & \dots & k_{N,N}+\sigma^2 \end{array} \right] \right)\label{eq:gppdistribution},
 \end{equation}
-Where $k_{i,j}$ represents the kernel that represents something like the covariance between points $x_i,x_j$. For the \textbf{diagonal terms}: If $k_{i,i}+\sigma^2=0$, every draw from the distribution in eq. \eqref{eq:gppdistribution} returns exactly the previously sampled points of $\mathcal{Y}^\text{train}$! Allowing $k_{i,i}+\sigma^2>0$, there is allowed to be some error even in drawing realizations from the posterior. For the \textbf{off-diagonal terms}: If $k_{i,j}$ is large, the values $\mathcal{Y}_i$ and $\mathcal{Y}_j$ will be similar, because they are correlated with each other.
+where $k_{i,j}$ represents the similarity between points $x_i,x_j$ -- this encodes how far away points extrapolate. Predictions for new points are then made based only on the previously established data:
+\begin{align}
+    y_\text{new} & \sim \mathcal{N}(\mu_*, \sigma^2_*)\\
+\mu_* = \mathbf{k}^T\mathbf{C}_n^{-1}\vec{y}_\text{so far},\quad&\quad\sigma^2_*=c-\mathbf{k}^T\mathbf{C}_n^{-1}\mathbf{k},\\
+\mathbf{C}_n=\mathbf{K}+\sigma_\text{assumed noise}^2\mathbf{I},\quad&\quad c{=}k(x_\text{new},x_\text{new})+\sigma_\text{assumed noise}^2,\\
+\mathbf{k}=k(x_\text{new},\mathbf{X}_\text{so far}),\quad&\quad\mathbf{K}_{ij}=k(x_{i,\text{so far}},x_{j,\text{so far}}).
+\end{align}
 
-Your choice of $k$ is where the assumption comes in (the No Free Lunch Theorem!), and where you have to make a choice. A typical kernel is the `Gaussian' kernel:
-\begin{equation}
-    k_{i,j} = e^{-\frac{-|x_i-x_j|^2}{\sigma_f}},
-\end{equation}
-where $\sigma_f$ is a chosen hyperparameter.
 
-
-It is interesting to think of the various options as taking two steps in the least-squares and Bayesian regression learning (learning the model, then making new predictions, i.e., induction and then deduction); while the Gaussian Process goes straight from the known data to the new predictions (i.e., transduction).
-\begin{center}\includegraphics[width=0.8\textwidth]{indetransudction.png}\end{center}
+% It is interesting to think of the various options as taking two steps in the least-squares and Bayesian regression learning (learning the model, then making new predictions, i.e., induction and then deduction); while the Gaussian Process goes straight from the known data to the new predictions (i.e., transduction).
+% \begin{center}\includegraphics[width=0.8\textwidth]{indetransudction.png}\end{center}
 
 % \newpage
 
 \section{Machine Learning 104: Density Estimation}
-I'll keep this short because there is not much to say. But if the data is unstructured, i.e., there are no available $y$ outcomes and we merely wonder about \textit{where} clusters are or \textit{how many} clusters there are, there are various methods we can try. Principally, we discussed \textbf{four} methods. The \textbf{expectation-maximization (EM) method} which clusters data into a given number of clusters; and the \textbf{Latent Dirichlet Allocation (LDA)} which clusters data into a non-prior given number of clusters, i.e., it is a fully data-driven process. The \textbf{Generative Adversarial Network (GAN)} learns how to cluster the data in an unspecified number of clusters; and plays a game against itself with two neural networks -- one creates samples from, approximately, the same distribution as the input data, and the other neural network must distinguish real data from made-up data; a \textit{generator} and a \textit{discriminator}. The \textbf{Autoencoder} learns to decode the original structure into a lower-dimensional form and reconstruct it back from there using two mirrored neural networks. The latter option is not dissimilar from \textbf{PCA}, in the sense that it finds a lower-dimensional structure in higher-dimensional data.
+I'll keep this short because there is not much to say. But if the data is unstructured, i.e., there are no available $y$ outcomes and we merely wonder about \textit{where} clusters are, \textit{how many} clusters there are, and generally trying to come up with ways to generate samples from an approximate estimate of the true data density. Principally, we discussed \textbf{four} methods, though not in any great detail.
+\begin{spexample}[Expectation maximization]
+    In this method we assign each point the most likely cluster given a user-defined number of randomly initialized distributions; and then we modify the distribution to optimally fit the given points. Iterating this process converges to a separation of the data in clusters:
+    \begin{center}\includegraphics[width=0.6\textwidth]{expectation-maximization.jpg}\end{center}
+\end{spexample}
+\begin{spexample}[Latent Dirichlet Process]
+    What if the number of clusters is unclear, or you don't want to commit to a single one? The latent Dirichlet Process allows you to assign an arbitrary amount of clusters, based on how much data is available -- which is why it relies on the Dirichlet distribution. Points that are close to each other end up in the same cluster, but when new points lie further away, we simply introduce a new cluster. From left to right we add more, introducing new clusters as needed:
+    \begin{center}\includegraphics[width=0.5\textwidth,trim={0cm 0cm 0cm 7cm},clip]{DP_clustering_simulation.png}\end{center}
+    See: \url{https://www.youtube.com/watch?v=6k7IzONQOzM} on the Dirichlet distribution, with slides: \url{https://www.slideshare.net/g33ktalk/machine-learning-meetup-12182013}.
+\end{spexample}
+\begin{spexample}[Generative Adversarial Network]
+    In this case we play a game with two neural network. One creates samples at random (from a noisy input), and another neural network learns to classify whether the result looks like something that was present in the original data or not. Iterating these two neural networks (the generator and the discriminator) against each other, and letting them both get better and better, eventually lets you generate random samples from the approximately correct data distribution, based on the limited input data that you used!
+    \begin{center}\includegraphics[width=0.6\textwidth]{Generativemodel.png}\end{center}
+    This method leads to incredible outcomes where a neural network can generate arbitrary new faces from random noise input!
+    \begin{center}\includegraphics[width=0.5\textwidth]{GAN_4.png}\end{center}
+\end{spexample}
+\begin{spexample}[Autoencoders]
+    The final discussed method is the autoencoder, which creates a neural network with identical input and output, but that has a very small center layer, such that the neural network \textit{must} learn to compress the properties of the data, and decompress them as well as possible, a bit like PCA perhaps:
+    \begin{center}\includegraphics[width=0.6\textwidth]{autoencoder_cat.png}\end{center}
+    This method has made it possible for example to have incomplete pictures and add the missing data, though the results are usually slightly unsettling:
+    \begin{center}\includegraphics[width=0.5\textwidth,trim={0cm 4cm 0cm 4cm},clip]{onemanautoencoder.jpg}\end{center}
+\end{spexample}
+
+% The \textbf{expectation-maximization (EM) method} which clusters data into a given number of clusters; and the \textbf{Latent Dirichlet Allocation (LDA)} which clusters data into a non-prior given number of clusters, i.e., it is a fully data-driven process. The \textbf{Generative Adversarial Network (GAN)} learns how to cluster the data in an unspecified number of clusters; and plays a game against itself with two neural networks -- one creates samples from, approximately, the same distribution as the input data, and the other neural network must distinguish real data from made-up data; a \textit{generator} and a \textit{discriminator}. The \textbf{Autoencoder} learns to decode the original structure into a lower-dimensional form and reconstruct it back from there using two mirrored neural networks. The latter option is not dissimilar from \textbf{PCA}, in the sense that it finds a lower-dimensional structure in higher-dimensional data.
+
 
 
 \newpage
