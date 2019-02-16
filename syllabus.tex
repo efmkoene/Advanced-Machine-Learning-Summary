@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[T1]{fontenc}
-\usepackage{amsmath,amssymb,mathtools,booktabs,multirow,colortbl,url,float}
+\usepackage{amsmath,amssymb,mathtools,booktabs,multirow,colortbl,url,float,epsdice}
 \usepackage[lined,boxed,commentsnumbered]{algorithm2e}
 \usepackage{algpseudocode}
 \algnewcommand{\Initialize}[1]{%
@@ -136,34 +136,34 @@ We define $\mathbb{P}(A)$ as the probability of event $A$ to be measured from th
     \mathbb{P}(A\cap A^c)=\mathbb{P}(\varnothing)&=0,&
     \mathbb{P}(A) + \mathbb{P}(A^c)&=1.
 \end{align}
-When probabilities are \textit{\textbf{indepedent}} (the outcome of one event doesn't influence the likelihood of another event; they happen in arbitrary order), it is implied that $\mathbb{P}(A,B)=\mathbb{P}(A)\mathbb{P}(B)$.
+When probabilities are \textit{\textbf{indepedent}} (the outcome of one event doesn't influence the likelihood of another event; they can happen in arbitrary order), it is implied that $\mathbb{P}(A,B)=\mathbb{P}(A)\mathbb{P}(B)$.
 \begin{testexample}[Throwing dice, part 1]
     We'll roll two dice, and consider event $A$ to represent that the first throw is $i\in\{1,2,3,4\}$ and the second throw is $j\in\{4,5,6\}$. Event $B$ is an outcome where the two dice sum to the number 7. The valid \textit{sample space} of $A$ and $B$ is here tabulated in {\color{gray} gray}:
     
 \begin{center}
 \hfill
-    \begin{tabular}{@{}ll|llllll}
+    \begin{tabular}{@{}ll|l@{}l@{}llll}
 \toprule
 A & & \multicolumn{6}{c}{$j$} \\ 
- & $(\cdot,\cdot)$ & 1 & 2 & 3 & \cellcolor{gray!10}4 & \cellcolor{gray!10}5 & \cellcolor{gray!10}6 \\ \hline
-\multirow{6}{*}{$i$} & \cellcolor{gray!10}1 & (1,1) & (1,2) & (1,3) & \cellcolor{gray!20}(1,4) & \cellcolor{gray!20}(1,5) & \cellcolor{gray!20}(1,6) \\
- & \cellcolor{gray!10}2 & (2,1) & (2,2) & (2,3) & \cellcolor{gray!20}(2,4) & \cellcolor{gray!20}(2,5) & \cellcolor{gray!20}(2,6) \\
- & \cellcolor{gray!10}3 & (3,1) & (3,2) & (3,3) & \cellcolor{gray!20}(3,4) & \cellcolor{gray!20}(3,5) & \cellcolor{gray!20}(3,6) \\
- & \cellcolor{gray!10}4 & (4,1) & (4,2) & (4,3) & \cellcolor{gray!20}(4,4) & \cellcolor{gray!20}(4,5) & \cellcolor{gray!20}(4,6) \\
- & 5                    & (5,1) & (5,2) & (5,3) & (5,4) & (5,5) & (5,6) \\
- & 6                    & (6,1) & (6,2) & (6,3) & (6,4) & (6,5) & (6,6) \\ \bottomrule
+ & $(\cdot,\cdot)$ & \epsdice{1} & \epsdice{2} & \epsdice{3} & \cellcolor{gray!10}\epsdice{4} & \cellcolor{gray!10}\epsdice{5} & \cellcolor{gray!10}\epsdice{6}\\ \hline
+\multirow{6}{*}{$i$} & \cellcolor{gray!10}\epsdice{1} & (\epsdice{1},\epsdice{1}) & (\epsdice{1},\epsdice{2}) & (\epsdice{1},\epsdice{3}) & \cellcolor{gray!20}(\epsdice{1},\epsdice{4}) & \cellcolor{gray!20}(\epsdice{1},\epsdice{5}) & \cellcolor{gray!20}(\epsdice{1},\epsdice{6}) \\
+ & \cellcolor{gray!10}\epsdice{2} & (\epsdice{2},\epsdice{1}) & (\epsdice{2},\epsdice{2}) & (\epsdice{2},\epsdice{3}) & \cellcolor{gray!20}(\epsdice{2},\epsdice{4}) & \cellcolor{gray!20}(\epsdice{2},\epsdice{5}) & \cellcolor{gray!20}(\epsdice{2},\epsdice{6}) \\
+ & \cellcolor{gray!10}\epsdice{3} & (\epsdice{3},\epsdice{1}) & (\epsdice{3},\epsdice{2}) & (\epsdice{3},\epsdice{3}) & \cellcolor{gray!20}(\epsdice{3},\epsdice{4}) & \cellcolor{gray!20}(\epsdice{3},\epsdice{5}) & \cellcolor{gray!20}(\epsdice{3},\epsdice{6}) \\
+ & \cellcolor{gray!10}\epsdice{4} & (\epsdice{4},\epsdice{1}) & (\epsdice{4},\epsdice{2}) & (\epsdice{4},\epsdice{3}) & \cellcolor{gray!20}(\epsdice{4},\epsdice{4}) & \cellcolor{gray!20}(\epsdice{4},\epsdice{5}) & \cellcolor{gray!20}(\epsdice{4},\epsdice{6}) \\
+ & \epsdice{5}                    & (\epsdice{5},\epsdice{1}) & (\epsdice{5},\epsdice{2}) & (\epsdice{5},\epsdice{3}) & (\epsdice{5},\epsdice{4}) & (\epsdice{5},\epsdice{5}) & (\epsdice{5},\epsdice{6}) \\
+ & \epsdice{6}                    & (\epsdice{6},\epsdice{1}) & (\epsdice{6},\epsdice{2}) & (\epsdice{6},\epsdice{3}) & (\epsdice{6},\epsdice{4}) & (\epsdice{6},\epsdice{5}) & (\epsdice{6},\epsdice{6}) \\ \bottomrule
 \end{tabular}
 \hfill
     \begin{tabular}{@{}ll|llllll}
 \toprule
 B & & \multicolumn{6}{c}{$j$} \\ 
- & + & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
-\multirow{6}{*}{$i$} & 1 & 2 & 3 & 4 & 5 & 6 & \cellcolor{gray!20}7 \\
- & 2 & 3 & 4 & 5 & 6 & \cellcolor{gray!20}7 & 8 \\
- & 3 & 4 & 5 & 6 & \cellcolor{gray!20}7 & 8 & 9 \\
- & 4 & 5 & 6 & \cellcolor{gray!20}7 & 8 & 9 & 10 \\
- & 5 & 6 & \cellcolor{gray!20}7 & 8 & 9 & 10 & 11 \\
- & 6 & \cellcolor{gray!20}7 & 8 & 9 & 10 & 11 & 12 \\ \bottomrule
+ & + & \epsdice{1} & \epsdice{2} & \epsdice{3} & \epsdice{4} & \epsdice{5} & \epsdice{6} \\ \hline
+\multirow{6}{*}{$i$} & \epsdice{1} & 2 & 3 & 4 & 5 & 6 & \cellcolor{gray!20}7 \\
+ & \epsdice{2} & 3 & 4 & 5 & 6 & \cellcolor{gray!20}7 & 8 \\
+ & \epsdice{3} & 4 & 5 & 6 & \cellcolor{gray!20}7 & 8 & 9 \\
+ & \epsdice{4} & 5 & 6 & \cellcolor{gray!20}7 & 8 & 9 & 10 \\
+ & \epsdice{5} & 6 & \cellcolor{gray!20}7 & 8 & 9 & 10 & 11 \\
+ & \epsdice{6} & \cellcolor{gray!20}7 & 8 & 9 & 10 & 11 & 12 \\ \bottomrule
 \end{tabular}
 \hfill
 \end{center}
@@ -173,7 +173,7 @@ B & & \multicolumn{6}{c}{$j$} \\
     \end{align*}
     If we want the intersection of $A$ and $B$, we are left with three valid outcomes:
     \begin{equation*}
-        A\cap B = \{ \{1,6\},\{2, 5\},\{3,4\} \},
+        A\cap B = \{ \{\epsdice{1},\epsdice{6}\},\,\{\epsdice{2}, \epsdice{5}\},\,\{\epsdice{3},\epsdice{4}\} \},
     \end{equation*}
     such that we can write:
     \begin{equation*}
@@ -195,11 +195,11 @@ We define $\mathbb{P}(A|B)\equiv\mathbb{P}(A,B)/\mathbb{P}(B)$ as the conditiona
     \begin{tabular}{@{}ll|llllll}
 \toprule
 $B|A$ & & \multicolumn{3}{c}{$j$} \\ 
- & + & 4 & 5 & 6 \\ \hline
-\multirow{4}{*}{$i$} & 1 & 5 & 6 & \cellcolor{gray!20}7 \\
-  & 2 & 6 & \cellcolor{gray!20}7 & 8 \\
-  & 3 & \cellcolor{gray!20}7 & 8 & 9 \\
-  & 4 & 8 & 9 & 10 \\ \bottomrule
+ & + & \epsdice{4} & \epsdice{5} & \epsdice{6} \\ \hline
+\multirow{4}{*}{$i$} & \epsdice{1} & 5 & 6 & \cellcolor{gray!20}7 \\
+  & \epsdice{2} & 6 & \cellcolor{gray!20}7 & 8 \\
+  & \epsdice{3} & \cellcolor{gray!20}7 & 8 & 9 \\
+  & \epsdice{4} & 8 & 9 & 10 \\ \bottomrule
 \end{tabular}
 \end{center}
 The valid sample space of $B$, given $A$, is now reduced, and $1/4$-th of its possible outcomes now generate event $B$! We can find the same result in a general way using our previously found probabilities and the conditional probability rule:
@@ -316,25 +316,25 @@ We define an indicator function $\mathbb{I}_{X=x}$, which is 1 when the statemen
 \begin{tabular}{@{}lr|llllll}
 \toprule
  & & \multicolumn{6}{c}{$j$} \\ 
- &$\mathbb{P}(i,j)$ & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
-\multirow{6}{*}{$i$} & 1 & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
- & 2 & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
- & 3 & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
- & 4 & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
- & 5 & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
- & 6 & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\ \bottomrule
+ &$\mathbb{P}(i,j)$ & \epsdice{1} & \epsdice{2} & \epsdice{3} & \epsdice{4} & \epsdice{5} & \epsdice{6} \\ \hline
+\multirow{6}{*}{$i$} & \epsdice{1} & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
+ & \epsdice{2} & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
+ & \epsdice{3} & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
+ & \epsdice{4} & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
+ & \epsdice{5} & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\
+ & \epsdice{6} & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ & $^{1\!}/_{\! 36}$ \\ \bottomrule
 \end{tabular}
 \hfill
 \begin{tabular}{@{}lr|llllll}
 \toprule
  & & \multicolumn{6}{c}{$j$} \\ 
- & $\mathbb{P}(A|i,j)$ & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
-\multirow{6}{*}{$i$} & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
- & 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
- & 3 & 0 & 0 & 0 & 0 & 0 & 1 \\
- & 4 & 0 & 0 & 0 & 0 & 1 & 0 \\
- & 5 & 0 & 0 & 0 & 1 & 0 & 0 \\
- & 6 & 0 & 0 & 1 & 0 & 0 & 0 \\ \bottomrule
+ & $\mathbb{P}(A|i,j)$ & \epsdice{1} & \epsdice{2} & \epsdice{3} & \epsdice{4} & \epsdice{5} & \epsdice{6} \\ \hline
+\multirow{6}{*}{$i$} & \epsdice{1} & 0 & 0 & 0 & 0 & 0 & 0 \\
+ & \epsdice{2} & 0 & 0 & 0 & 0 & 0 & 0 \\
+ & \epsdice{3} & 0 & 0 & 0 & 0 & 0 & 1 \\
+ & \epsdice{4} & 0 & 0 & 0 & 0 & 1 & 0 \\
+ & \epsdice{5} & 0 & 0 & 0 & 1 & 0 & 0 \\
+ & \epsdice{6} & 0 & 0 & 1 & 0 & 0 & 0 \\ \bottomrule
 \end{tabular}
     \end{center}
     Their point-wise multiplication leads to the following table:
@@ -342,13 +342,13 @@ We define an indicator function $\mathbb{I}_{X=x}$, which is 1 when the statemen
         \begin{tabular}{@{}lr|llllll}
 \toprule
  & & \multicolumn{6}{c}{$j$} \\ 
- & $\mathbb{P}(A|i,j)\mathbb{P}(i,j)$ & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
-\multirow{6}{*}{$i$} & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
- & 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
- & 3 & 0 & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 36}$ \\
- & 4 & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 36}$ & 0 \\
- & 5 & 0 & 0 & 0 &  $^{1\!}/_{\! 36}$ & 0 & 0 \\
- & 6 & 0$\hphantom{\frac{1}{2}}$ & 0$\hphantom{\frac{1}{2}}$ &  $^{1\!}/_{\! 36}$ & 0 & 0 & 0 \\ \bottomrule
+ & $\mathbb{P}(A|i,j)\mathbb{P}(i,j)$ & \epsdice{1} & \epsdice{2} & \epsdice{3} & \epsdice{4} & \epsdice{5} & \epsdice{6} \\ \hline
+\multirow{6}{*}{$i$} & \epsdice{1} & 0 & 0 & 0 & 0 & 0 & 0 \\
+ & \epsdice{2} & 0 & 0 & 0 & 0 & 0 & 0 \\
+ & \epsdice{3} & 0 & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 36}$ \\
+ & \epsdice{4} & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 36}$ & 0 \\
+ & \epsdice{5} & 0 & 0 & 0 &  $^{1\!}/_{\! 36}$ & 0 & 0 \\
+ & \epsdice{6} & 0$\hphantom{\frac{1}{2}}$ & 0$\hphantom{\frac{1}{2}}$ &  $^{1\!}/_{\! 36}$ & 0 & 0 & 0 \\ \bottomrule
 \end{tabular}
     \end{center}
     The evidence term is found by summing over this table, giving the marginal probability:
@@ -360,16 +360,16 @@ We define an indicator function $\mathbb{I}_{X=x}$, which is 1 when the statemen
         \begin{tabular}{@{}lr|llllll}
 \toprule
  & & \multicolumn{6}{c}{$j$} \\ 
- & $\mathbb{P}(i,j|A)$ & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
-\multirow{6}{*}{$i$} & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
- & 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
- & 3 & 0 & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 4}$ \\
- & 4 & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 4}$ & 0 \\
- & 5 & 0 & 0 & 0 &  $^{1\!}/_{\! 4}$ & 0 & 0 \\
- & 6 & 0$\hphantom{\frac{1}{2}}$ & 0$\hphantom{\frac{1}{2}}$ &  $^{1\!}/_{\! 4}$ & 0 & 0 & 0 \\ \bottomrule
+ & $\mathbb{P}(i,j|A)$ & \epsdice{1} & \epsdice{2} & \epsdice{3} & \epsdice{4} & \epsdice{5} & \epsdice{6} \\ \hline
+\multirow{6}{*}{$i$} & \epsdice{1} & 0 & 0 & 0 & 0 & 0 & 0 \\
+ & \epsdice{2} & 0 & 0 & 0 & 0 & 0 & 0 \\
+ & \epsdice{3} & 0 & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 4}$ \\
+ & \epsdice{4} & 0 & 0 & 0 & 0 &  $^{1\!}/_{\! 4}$ & 0 \\
+ & \epsdice{5} & 0 & 0 & 0 &  $^{1\!}/_{\! 4}$ & 0 & 0 \\
+ & \epsdice{6} & 0$\hphantom{\frac{1}{2}}$ & 0$\hphantom{\frac{1}{2}}$ &  $^{1\!}/_{\! 4}$ & 0 & 0 & 0 \\ \bottomrule
 \end{tabular}
     \end{center}
-    The posterior now says: if we know that the dice sum to 9, we are certain we threw either $(3,6)$, $(4,5)$, $(5,4)$ or $(6,3)$; all with equal probability of 25\%. No other outcome is possible!
+    The posterior now says: if we know that the dice sum to 9, we are certain we threw either $(\epsdice{3},\epsdice{6})$, $(\epsdice{4},\epsdice{5})$, $(\epsdice{5},\epsdice{4})$ or $(\epsdice{6},\epsdice{3})$; all with equal probability of 25\%. No other outcome is possible!
 \end{testexample}
 
 
@@ -504,7 +504,7 @@ Random variables have their means computed as the \textbf{expected value} $\math
 \begin{testexample}[Rolling dice, pt. 1]
     Consider a fair 6-sided die, then the expected value is defined as:
     \begin{equation}
-        \mathbb{E}[X]=\sum_{n=1}^6 n\mathbb{P}(X=n) = 1\cdot\frac{1}{6}+2\cdot\frac{1}{6}+\cdots+6\cdot\frac{1}{6}=\frac{7}{2}.
+        \mathbb{E}[X]=\sum_{n=1}^6 n\mathbb{P}(X=n) = \epsdice{1}\cdot\frac{1}{6}+\epsdice{2}\cdot\frac{1}{6}+\cdots+\epsdice{6}\cdot\frac{1}{6}=\frac{7}{2}.
     \end{equation}
     The expected value is then the average outcome if you'd roll infinitely many times!
 \end{testexample}
@@ -840,7 +840,7 @@ Imagine a data-set with samples and their label:
 \begin{equation}
     \mathcal{D} = \Bigg\{ (\vec{x}_1,y_1), \dots, (\vec{x}_N,y_N) \Bigg\} \subseteq \mathcal{X}\times\mathcal{Y}
 \end{equation}
-where $\vec{x}_i$ is the $i$-th \textbf{feature vector} from space $\mathcal{X}$, and $y_i$ the corresponding \textbf{label} from space $\mathcal{Y}$. ($\mathcal{Y}$ could represent $k$ classes $\{0,1,\dots,k\}$ when we do a classification problem, or all real numbers $\mathbb{R}$ for a regression problem). We assume that the pairs are drawn i.i.d. from a distribution,
+where $\vec{x}_i$ is the $i$-th \textbf{feature vector} from space $\mathcal{X}$, and $y_i$ the corresponding \textbf{label} from space $\mathcal{Y}$. ($\mathcal{Y}$ could represent $k$ classes $\{0,1,\dots,k\}$ when we do a classification problem, or all real numbers $\mathbb{R}$ for a regression problem). We assume that the pairs are drawn i.i.d. from some distribution,
 \begin{equation}
     (\vec{x}_i,y_i) \sim P,
 \end{equation}
@@ -848,7 +848,7 @@ but this distribution is unknown to us!
 
 Then we require a program (or `hypothesis'), referred to as $h(x)$ or $f(x)$ that maps $\vec{x}_i$ into $y_i$. We assume that the hypothesis $h$ is drawn from its own class $h\in\mathcal{C}$. Examples of the space $\mathcal{C}$ are decision trees, linear classifiers, artificial neural networks, support vector machines, \dots. The optimal algorithm is a problem-dependent feature. It often pays off to try a large number of methods (the `\textbf{No Free Lunch theorem}' states that there is no single optimal problem-independent algorithm).
 \begin{spexample}[No Free Lunch theorem]
-    The No Free Lunch (NFL) theorem states that there is no single algorithm that works optimally on \textit{all} problems. The contribution of NFL is that it tells us choosing an appropriate algorithm requires making assumptions about the kinds of target functions the algorithm is being used for. With no assumptions, no `meta-algorithm' performs better than random choice! In our case, it thus means that we should try a variety of models to see which model works optimally for our problem.
+    The No Free Lunch (NFL) theorem states that there is no single algorithm that works optimally on \textit{all} problems. The message of NFL is that it tells us choosing an appropriate algorithm requires making assumptions about the kinds of target functions the algorithm is being used for. With no assumptions, no `meta-algorithm' performs better than random choice! In our case, it thus means that we should try a variety of models to see which model works optimally for our problem; or think very carefully which algorithm best fits the problem at hand!
 \end{spexample}
 
 \subsection{Loss functions \& generalization}
@@ -1051,7 +1051,7 @@ Why use only \textit{one} hyperplane? This is the idea behind \textit{decision t
 %
 {\flushleft Rather} than using on a single decision tree, it often pays off to use \textbf{ensemble methods}. In such a case we often train multiple decision trees, and classify by a (weighted) majority vote:
 \begin{equation}
-    y_i = \sign( \alpha_1 h_1(\vec{x}_i) + \alpha_2h_2(\vec{x}_i) + \dots ).
+    y_i = \sign\Bigg( \alpha_1 h_1(\vec{x}_i) + \alpha_2h_2(\vec{x}_i) + \dots \Bigg).
 \end{equation}
 \begin{testexample}[Ensemble methods]
     In the example below, you see a Random Forest (training many deep decision trees) and AdaBoost (training many one-level decision trees) classifying data, with the right-bottom showing the accuracy (higher is better). These ensemble methods outperform the simple decision tree, because pooling multiple different classifiers makes them less likely to overfit.
@@ -1062,41 +1062,43 @@ Why use only \textit{one} hyperplane? This is the idea behind \textit{decision t
 \subsection{Probabilistic models}
 The final perspective takes a probabilistic approach. Assume that the data $\mathcal{Z}^\text{train}$ can in some way be explained by a distribution parameterized with $\theta_j$ (one for each class $j$). The machine learning problem now reduces to finding the appropriate $\theta_j$ that explains the data. Compared to the previous approaches, we now actually obtain the probability of any new point belonging to either of the classes!
 
+Really, all three methods below are just approximations of the Bayes' solution, $\mathbb{P}(\theta|\mathcal{Z}^\text{train})=\mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j)/\mathbb{P}(\mathcal{Z}^\text{train})$.
+
 
 \subsubsection{Maximum Likelihood Estimation (MLE)}
-In this case we are interested in maximizing the likelihood of the training data, given $\hat{\theta}_j$:
+If we assume a uniform likelihood of $\mathbb{P}(\theta_j)$, we maximize the likelihood of the data given the model:
 \begin{equation}
-    \hat{\theta}_j\in\argmax_\theta \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j) = \argmax_\theta \log\left( \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j) \right).
+    \theta_j = \argmax_{\theta} \frac{\mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j)}{\mathbb{P}(\mathcal{Z}^\text{train})} \propto \argmax_{\theta} \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j),
 \end{equation}
-Because we now have an explicit parameterization of the data distribution(s), we simply classify new points by assigning them to the most probable class, i.e., that one that gives the highest probability to the current point:
+we drop the evidence (denominator) because it is unaffected by $\theta_j$! We assume that the data can be explained by a distribution (usually a Gaussian), we must simply find the best parameters of the distribution. New points are assigned to the most likely class based on the established distribution:
 \begin{equation}
     y_i = \argmax_j \mathbb{P}(\vec{x}_i|\hat{\theta}_j).
 \end{equation}
-Finding the optimal $\hat{\theta}_j$ is actually a fairly hard problem to solve directly, but can be done anyhow. When using strictly Normal distributions, the obtained model is called a `Gaussian Mixture Model' (GMM).
-\begin{testexample}[Gaussian Mixture Model]
-    After the fitting procedure, we then end up with Gaussians in our feature space with Gaussian parameters $\theta_j=\{\mu_j,\bm{\Sigma}_j\}$ for 6 different classes all with different centers of mass and variance in the feature space:
-    \begin{center}\includegraphics[width=0.6\textwidth,trim={0.5cm 0.35cm 0 0},clip]{MLE_class.jpg}\end{center}
+Finding the optimal $\hat{\theta}_j$ can be done efficiently for standard distributions. For example, for the Gaussian the MLE parameters are established from the data with mean $\hat{\mu}_j=\sum_{j} \vec{x}_j/J$ and variance $\hat{\Sigma}_j=\sum_{j}(\vec{x}_j-\mu_j)(\vec{x}_j-\mu_j)^T/J$, where $J$ is the number of samples in class $j$.
+\begin{testexample}[MLE of Gaussians]
+    After a fitting procedure, we then end up with Gaussians in our feature space with Gaussian parameters $\theta_j=\{\mu_j,\bm{\Sigma}_j\}$ for 6 different classes all with different centers of mass and variance in the feature space:
+    \begin{center}\includegraphics[width=0.5\textwidth,trim={0.5cm 0.35cm 0 0},clip]{MLE_class.jpg}\end{center}
 \end{testexample}
-
-\subsubsection{Naive Bayes Classifier}
-The Naive Bayesian classifier assumes that all features are independent. This simplifies the method (no joint probabilities are required anymore) and is furthermore rather robust in practice!
-\begin{testexample}[Naive Bayes model]
-    You can see it in this plot because the Gaussians are aligned with the features (i.e., grid), rather than allowed to rotate as we saw on the previous page.
-    \begin{center}\includegraphics[width=0.6\textwidth]{naivegaussian.png}\end{center}
-\end{testexample}
-\vspace{-0.5cm}
 
 \subsubsection{Maximum a posteriori (MAP)}
 Rather than only optimizing the likelihood as in MLE, we can compute the $\argmax_{\theta_j}$ for the full Bayesian posterior:
 \begin{equation}
     \mathbb{P}(\theta_j|\mathcal{Z}^\text{train}) = \frac{\mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j)}{\mathbb{P}(\mathcal{Z}^\text{train})} \propto \mathbb{P}(\mathcal{Z}^\text{train}|\theta_j)\mathbb{P}(\theta_j),
 \end{equation}
-we drop the evidence (denominator) because it is unaffected by $\theta_j$! Note that the resulting form is thus the MLE objective weighed by the prior $\mathbb{P}(\theta_j)$. This prior is independent of the data and we can consider it to be a form of \textbf{regularization}: when the parameter $\theta_j$ deviates much from what we believe is reasonable, we need a lot of evidence to convince us it's right. The MAP thus reduces the MLE if we assume a uniform prior for the parameters $\theta_j$!
+Note that the resulting form is thus the MLE objective weighed by the prior $\mathbb{P}(\theta_j)$. This prior is independent of the data and we can consider it to be a form of \textbf{regularization}: when the parameter $\theta_j$ deviates much from what we believe is reasonable, we need a lot of evidence to convince us it's right. The MAP thus reduces the MLE if we assume a uniform prior for the parameters $\theta_j$!
+
+\subsubsection{Naive Bayes Classifier}
+The Naive Bayesian classifier assumes that all features are independent. This simplifies the method (no joint probabilities are required anymore) and is furthermore rather robust in practice! Classifying a new point to a cluster is then given by taking the $\argmax_j(\mathbb{P}(\mathcal{Z}^\text{train},\hat{\vec{\theta}}_j)$, i.e., which class scores highest, given the model!
+\begin{testexample}[Naive Bayes model]
+    You can see it in this plot because the Gaussians are aligned with the features (i.e., grid), rather than allowed to rotate as we saw on the previous page.
+    \begin{center}\includegraphics[width=0.6\textwidth]{naivegaussian.png}\end{center}
+\end{testexample}
+\vspace{-0.5cm}
 
 \begin{mymathbox}[ams align, title={MLE, Naive Bayes \& MAP}, colframe=blue!30!black, center title]
-    \text{MLE:}\quad & \argmax_{\vec{w}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w})=\argmax_{\vec{w}} \prod_{i=1}^N \mathbb{P}(y_i|x_i,x_{i+1},\dots,x_n,\vec{w}) \\
-    \text{Naive Bayes:}\quad & \argmax_{\vec{w}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{w})=\argmax_{\vec{w}} \prod_{i=1}^N \mathbb{P}(y_i|x_i,\vec{w}) \\
-    \text{MAP:}\quad & \argmax_{\vec{w}}\mathbb{P}(\vec{w}|\mathcal{Z}^\text{train})\propto \argmax_{\vec{w}}\prod_{i=1}^N \mathbb{P}(y_i|x_i,x_{i+1},\dots,x_n,\vec{w})\mathbb{P}(\vec{w}).
+    \text{MLE:}\quad & \argmax_{\vec{\theta}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{\theta})\propto\argmax_{\vec{\theta}} \prod_{i=1}^N \mathbb{P}(y_i|x_i,x_{i+1},\dots,x_n,\vec{\theta}), \\
+    \text{MAP:}\quad & \argmax_{\vec{\theta}}\mathbb{P}(\vec{\theta}|\mathcal{Z}^\text{train})\propto \argmax_{\vec{\theta}}\prod_{i=1}^N \mathbb{P}(y_i|x_i,x_{i+1},\dots,x_n,\vec{\theta})\mathbb{P}(\vec{\theta}),\\
+    \text{Naive Bayes:}\quad & \argmax_{\vec{\theta}} \mathbb{P}(\mathcal{Z}^\text{train}|\vec{\theta})\propto\argmax_{\vec{\theta}} \prod_{i=1}^N \mathbb{P}(y_i|x_i,\vec{\theta})\mathbb{P}(\vec{\theta}).
 \end{mymathbox}
 
 
@@ -1111,7 +1113,7 @@ we drop the evidence (denominator) because it is unaffected by $\theta_j$! Note 
 
 \newpage
 \section{Machine learning 103: Regression}
-We'll do a quick run-down of three typical regression perspectives/algorithms.
+We'll do a quick run-down of the three typical regression perspectives/algorithms.
 \subsection{Linear regression}
 From the above section with hyperplanes, we may remember that we can put our features in homogenized coordinates $\vec{x}=[1\ \,\texttt{Feature 1}\ \,\texttt{Feature 2}\ \,\dots]$, to be able to write any linear regression solution (2-D line, 3-D plane, \dots) as:
 \begin{equation}
@@ -1131,7 +1133,7 @@ Our challenge thus lies in finding the weights $\vec{w}$. Note that, as with the
     \begin{equation}
         \hat{\vec{w}} = (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\vec{y}.
     \end{equation}
-    We then predict any new point with the least-squares regression model:
+    We then predict any new point $(x_i,y_i)$ with the least-squares regression model:
     \begin{equation}
         y_i = \vec{x}_i^T (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\vec{y} =  \left((\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\vec{y}\right)^T\vec{x}_i.
     \end{equation}
@@ -1154,7 +1156,7 @@ With Bayesian regression we remain close to linear regression, but quantify the 
 \begin{equation}
     y = \vec{x}^T\vec{w} + \epsilon\quad\quad\text{with }\epsilon \sim \mathcal{N}(0,\sigma^2).
 \end{equation}
-The probabilistic model thus assumes that $y$ is \textit{drawn from a distribution}:
+The probabilistic model thus assumes that $y$ is \textit{drawn from an, e.g., normal distribution}:
 \begin{equation}
     y \sim \mathcal{N}(\vec{x}^T\vec{w},\sigma^2),\label{eq:drawingy}
 \end{equation}
@@ -1186,9 +1188,9 @@ For the Gaussian process, we take a \textit{very} different perspective at the p
 
 We thus make no choice for a linear model $\vec{w}$ or transformation $\phi$. We simply assume \text{all} possible lines that we can draw are possible models, and we let the data constrain the type of models that actually work for our data!
 \begin{testexample}[Gaussian process regression]
-    In the figure below, we have some \textit{priors} (all possible models in the universe, only assuming that data is correlated in $x$ and $y$ directions to a certain point, such that the lines are smooth), then some data comes in and we must draw from the \textit{posterior} (all possible models in the universe from the prior that cross through the known data at $x=\{2,4,6,7,9\}$), which we can also graph in the way that is done in the right-most picture that shows the standard-deviation of all the models:
+    In the figure below, we see 5 of the infinite number of \textit{priors} (all possible models in the universe, only assuming that data is correlated in $x$ and $y$ directions to a certain point, such that the lines are smooth), then some data comes in and we see 5 draws from the infinite number of \textit{posterior} models (all possible models in the universe from the prior that cross through the known data at $x=\{2,4,6,7,9\}$), which we can also graph in the way that is done in the right-most picture that shows the standard-deviation of the infinite number of models:
     \begin{center}\includegraphics[width=0.8\textwidth]{Gaussian_Process_Regression.png}\end{center}
-    {\flushleft The} only required user input is thus the \textit{covariance} or \textit{kernel} that expresses how well we can extrapolate away from given points, thus how smooth the priors are. Check out the demos: \url{https://youtu.be/R-NUdqxKjos?t=2829} and  \url{https://youtu.be/BzHJ57QCdVo?t=945}. From the right-hand side figure it is clear where we should get new samples (in the most uncertain place, where the grey area is largest) to learn most new information -- this is a powerful, it tells us where we are more or less uncertain!
+    {\flushleft The} only required user input is thus the \textit{covariance} or \textit{kernel} that expresses how well we can extrapolate away from given points, thus how smooth the priors are. Check out the demos: \url{https://youtu.be/R-NUdqxKjos?t=2829} and  \url{https://youtu.be/BzHJ57QCdVo?t=945}. From the right-hand side figure it is clear where we should get new samples (in the most uncertain place, where the grey area is largest) to learn most new information -- this is powerful, it tells us where we are more or less uncertain, and which areas we should put effort in when we, e.g., want to find the global minimum!
 \end{testexample}
 
 In other words, we assume that our `known' values $\mathcal{Y}^\text{train}$, as well as our latest new value $y_N$ are drawn from a multivariate Gaussian distribution:
@@ -1210,7 +1212,7 @@ where $k_{i,j}$ represents the similarity between points $x_i,x_j$ -- this encod
 % \newpage
 
 \section{Machine Learning 104: Density Estimation}
-I'll keep this short because there is not much to say. But if the data is unstructured, i.e., there are no available $y$ outcomes and we merely wonder about \textit{where} clusters are, \textit{how many} clusters there are, and generally trying to come up with ways to generate samples from an approximate estimate of the true data density. Principally, we discussed \textbf{four} methods, though not in any great detail.
+I'll keep this short because there is not much to say. But if the data is unstructured, i.e., there are no available $y$ outcomes and we merely wonder about \textit{where} clusters are, \textit{how many} clusters there are, or try to come up with ways to \textit{generate new samples} from an approximate estimate of the true data density $P$. Principally, we discussed \textbf{four} methods, though not in any great detail.
 \begin{spexample}[Expectation maximization]
     In this method we assign each point the most likely cluster given a user-defined number of randomly initialized distributions; and then we modify the distribution to optimally fit the given points. Iterating this process converges to a separation of the data in clusters:
     \begin{center}\includegraphics[width=0.6\textwidth]{expectation-maximization.jpg}\end{center}
@@ -1218,18 +1220,18 @@ I'll keep this short because there is not much to say. But if the data is unstru
 \begin{spexample}[Latent Dirichlet Process]
     What if the number of clusters is unclear, or you don't want to commit to a single one? The latent Dirichlet Process allows you to assign an arbitrary amount of clusters, based on how much data is available -- which is why it relies on the Dirichlet distribution. Points that are close to each other end up in the same cluster, but when new points lie further away, we simply introduce a new cluster. From left to right we add more, introducing new clusters as needed:
     \begin{center}\includegraphics[width=0.5\textwidth,trim={0cm 0cm 0cm 7cm},clip]{DP_clustering_simulation.png}\end{center}
-    See: \url{https://www.youtube.com/watch?v=6k7IzONQOzM} on the Dirichlet distribution, with slides: \url{https://www.slideshare.net/g33ktalk/machine-learning-meetup-12182013}.
+    See: \url{https://www.youtube.com/watch?v=6k7IzONQOzM} on the Dirichlet distribution, with slides at \url{https://www.slideshare.net/g33ktalk/machine-learning-meetup-12182013}.
 \end{spexample}
 \begin{spexample}[Generative Adversarial Network]
-    In this case we play a game with two neural network. One creates samples at random (from a noisy input), and another neural network learns to classify whether the result looks like something that was present in the original data or not. Iterating these two neural networks (the generator and the discriminator) against each other, and letting them both get better and better, eventually lets you generate random samples from the approximately correct data distribution, based on the limited input data that you used!
-    \begin{center}\includegraphics[width=0.6\textwidth]{Generativemodel.png}\end{center}
-    This method leads to incredible outcomes where a neural network can generate arbitrary new faces from random noise input!
+    This method plays a game with two neural nets: one generates random samples, the other classifies whether the sample could belong to the original data distribution. After many games, the generator net can fool the discriminator, and create convincing new data based on a limited input!
+    \begin{center}\includegraphics[width=0.5\textwidth]{Generativemodel.png}\end{center}
+    For example, this GAN can generate convincing new faces at random!
     \begin{center}\includegraphics[width=0.5\textwidth]{GAN_4.png}\end{center}
 \end{spexample}
 \begin{spexample}[Autoencoders]
-    The final discussed method is the autoencoder, which creates a neural network with identical input and output, but that has a very small center layer, such that the neural network \textit{must} learn to compress the properties of the data, and decompress them as well as possible, a bit like PCA perhaps:
+    The autoencoder is a network with identical input and output, but with a small center layer such that the network \textit{must} learn the low-dimensional features of the data, a bit like PCA:
     \begin{center}\includegraphics[width=0.6\textwidth]{autoencoder_cat.png}\end{center}
-    This method has made it possible for example to have incomplete pictures and add the missing data, though the results are usually slightly unsettling:
+    This method makes it for example possible to fill in data from incomplete pictures, though the results are usually slightly unsettling:
     \begin{center}\includegraphics[width=0.5\textwidth,trim={0cm 4cm 0cm 4cm},clip]{onemanautoencoder.jpg}\end{center}
 \end{spexample}
 
@@ -1240,68 +1242,85 @@ I'll keep this short because there is not much to say. But if the data is unstru
 \newpage
 
 \section{Machine learning 201: Quantifying Accuracy}
+We now study an important aspect of the statistical nature of learning: the bias-variance trade-off.
+
 \subsection{Bias-variance trade-off of expected risk}
-The \textbf{bian-variance trade-off} is a defining insight that separates the people just playing around with algorithms from the data-scientists. We simply decompose the \textbf{test-error} into a squared bias term, a squared error term and a squared deviation (thus, variance) term. We assume a training data-set of $N$ entries as drawn from:
-\begin{equation}
-    \mathcal{Z}^\text{train}\sim \mathbb{P}(X,Y)^N,
-\end{equation}
-as well as a new test-point $\{x,y\}$ drawn from the same distribution:
-\begin{equation}
-    \{x,y\}\sim \mathbb{P}(X,Y).
-\end{equation}
-It is important to realize that $\mathcal{Z}^\text{train}$ and $\{x,y\}$ are \textit{independent random variables} drawn from the distribution $\mathbb{P}(X,Y)$.
+First, what is it? The \textbf{bias-variance trade-off decomposes the test-error} into a sum of bias, noise and variance. Generally, reducing the bias increases the variance and vice versa, hence, a trade-off. It is a defining insight that separates people just playing around with algorithms from data-scientists! See \url{http://scott.fortmann-roe.com/docs/BiasVariance.html}.
+\begin{testexample}[Typical bias-variance trade-off]
+    Bias skews the results away from the true distribution (thus represents underfitting); variance expresses how much predictions change from draw to draw (thus represents overfitting). An optimum must be found where both components are both small, at a trade-off point.
+    \begin{center}
+    \includegraphics[width=0.59\textwidth,trim={0cm 2.5cm 0cm 4cm},clip]{Bias-Variance+Trade+Off.jpg}
+    \includegraphics[width=0.35\textwidth]{Low-High-Variances-Biases.png}
+    \end{center}
+\end{testexample}
+\begin{spexample}[Setting of the bias-variance trade-off]
+    We assume that the $N$ training data are drawn i.i.d. from:
+    \begin{equation}
+        \mathcal{Z}^\text{train} \sim P^N,
+    \end{equation}
+    and an additional new test-point $(x,y)$ is drawn from the same distribution:
+    \begin{equation}
+        (x,y)\sim P.
+    \end{equation}
+    We will assume a classification problem, as it is easier to derive the trade-off with. But the concept applies also to a regression problem.
 
-Furthermore, we understand that (the training data and new test-point being random variables), we can have do expectations over them that give averages, denoted with a bar. We require $\overline{y}$ and $\overline{h}_\mathcal{Z}$ for our purpose. We can find the average outcome, given $x$, i.e. a relationship $y(x)$:
-\begin{equation}
-    \overline{y}(x) = \mathbb{E}_{y|x}[Y].\quad\text{\textbf{Expected label}}.
-\end{equation}
-Furthermore, assume we have some algorithm that produces classifiers based on input data $\mathcal{Z}$:
-\begin{equation}
-    \overline{h}(x) = \mathbb{E}_{\mathcal{Z}}[h_\mathcal{Z}(x)]. \quad\text{\textbf{Expected classifier}}.
-\end{equation}
-
-Now we have all the required ingredients to write down the expected test-error and decompose it into three portions. Step-by-step we find the following, starting with the squared error (which is simply the expected \textit{squared loss function} for any data-point $\{x,y\}$, $N=1$ so to speak):
+    We then define three expectations:
+    \begin{align}
+        \overline{y}(x) &= \mathbb{E}_{y|x}[Y],&& \textbf{Expected label}, \\
+        \overline{h}(x) &= \mathbb{E}_\mathcal{Z}[h_\mathcal{Z}(x)],&&\textbf{Expected classifier},\\
+        E &= \mathbb{E}_{\mathcal{Z},x,y}[(h_\mathcal{Z}(x)-y(x))^2],&&\textbf{Expected test-error}.
+    \end{align}
+    That is: $\overline{y}(x)$ is the average expected label for, while $\overline{h}(x)$ represents the average expected classifier based on the data. $E$, finally, is the expectation of the test-error.
+\end{spexample}
+{\flushleft We} now decompose the expected test-error for the new data-point $(x,y)$, after training $h$ with $\mathcal{Z}^\text{train}$:
 \begin{align}
-    \mathbb{E}_{\mathcal{Z},x,y}[(h_\mathcal{Z}(x)-y)^2] & = \text{\textbf{Expected test-error}},\\
-    & = \mathbb{E}_{\mathcal{Z},x,y}[(h_\mathcal{Z}(x) \underbrace{- \overline{h} + \overline{h}}_\text{add 0} - y)^2],\\
-    & = \mathbb{E}_{\mathcal{Z},x,y}[(\underbrace{(h_\mathcal{Z}(x) - \overline{h})}_{a} + \underbrace{(\overline{h} - y)}_{+b})^2]\\
-    & = \mathbb{E}_{\mathcal{Z},x,y}[\overbrace{(h_\mathcal{Z}(x) - \overline{h})^2}^{a^2}] + \mathbb{E}_{\mathcal{Z},x,y}[\overbrace{(\overline{h} - y)^2}^{+b^2}] + \underbrace{\mathbb{E}_{\mathcal{Z},x,y}[\overbrace{2(h_\mathcal{Z}(x) - \overline{h})(\overline{h} - y)}^{+2ab}]}_\text{will become 0...}\\
+    E & = \mathbb{E}_{\mathcal{Z},x,y}[(h_\mathcal{Z}(x) \underbrace{- \overline{h} + \overline{h}}_\text{add 0} - y)^2] = \mathbb{E}_{\mathcal{Z},x,y}[(\underbrace{(h_\mathcal{Z}(x) - \overline{h})}_{a} + \underbrace{(\overline{h} - y)}_{+b})^2],\\
+    & = \mathbb{E}_{\mathcal{Z},x,y}[\overbrace{(h_\mathcal{Z}(x) - \overline{h})^2}^{a^2}] + \mathbb{E}_{\mathcal{Z},x,y}[\overbrace{(\overline{h} - y)^2}^{+b^2}] + \underbrace{\mathbb{E}_{\mathcal{Z},x,y}[\overbrace{2(h_\mathcal{Z}(x) - \overline{h})(\overline{h} - y)}^{+2ab}]}_\text{will become 0...},\\
     & = \overbrace{
             \mathbb{E}_{\mathcal{Z},x,y}[(h_\mathcal{Z}(x) - \overline{h})^2] + \mathbb{E}_{\mathcal{Z},x,y}[(\overline{h} - y)^2]
         }^\text{keep the same for now...}+ 
         \underbrace{\overbrace{
             2\mathbb{E}_{x,y}\left[
                 \underbrace{\mathbb{E}_{\mathcal{Z}}[(h_\mathcal{Z}(x) - \overline{h})]}_{\substack{\mathbb{E}_\mathcal{Z}[h_\mathcal{Z}(x)]=\overline{h},\\\mathbb{E}_\mathcal{Z}[h_\mathcal{Z}(x)-\overline{h}]=0}}
-            \mathbb{E}_{\mathcal{Z}}[(\overline{h} - y)]\right]}^\text{Independent expectations w.r.t $\mathcal{Z}$}}_{\to 0}\\
+            \mathbb{E}_{\mathcal{Z}}[(\overline{h} - y)]\right]}^\text{Independent expectations w.r.t $\mathcal{Z}$}}_{\to 0},\\
     & = \overbrace{\mathbb{E}_{\mathcal{Z},x}[(h_\mathcal{Z}(x) - \overline{h})^2] + \mathbb{E}_{x,y}[(\overline{h} - y)^2]}^\text{remove independent conditions}.
 \end{align}
-So, we have managed to insert the expected classifier in there, and then got rid of the mixed term. We now do the exact same thing; inserting $\overline{y}$ in the equation and getting rid of the mixed term:
+We now do the exact same thing as above: insert $\overline{y}$ in the equation and get rid of the mixed term:
 \begin{align}
-    \mathbb{E}_{\mathcal{Z},x,y}[(h_\mathcal{Z}-y)^2] & = \underbrace{\mathbb{E}_{\mathcal{Z},x}[(h_\mathcal{Z} - \overline{h})^2]}_\text{keep untouched} + \mathbb{E}_{x,y}[((\overline{h} \underbrace{-\overline{y})+(\overline{y}}_\text{add 0} - y))^2]\\
+    E & = \underbrace{\mathbb{E}_{\mathcal{Z},x}[(h_\mathcal{Z} - \overline{h})^2]}_\text{keep untouched} + \mathbb{E}_{x,y}[((\overline{h} \underbrace{-\overline{y})+(\overline{y}}_\text{add 0} - y))^2]\\
     & = \mathbb{E}_{\mathcal{Z},x}[(h_\mathcal{Z} - \overline{h})^2] + \overbrace{\mathbb{E}_{x,y}[(\overline{h} -\overline{y})^2]+\mathbb{E}_{x,y}[(\overline{y} - y)^2] + \underbrace{2\mathbb{E}_{x,y}[(\overline{h} -\overline{y})(\overline{y} - y)]}_\text{will become 0...}}^\text{complete the square...}\\
     & = \mathbb{E}_{\mathcal{Z},x}[(h_\mathcal{Z} - \overline{h})^2] + \mathbb{E}_{x,y}[(\overline{h} -\overline{y})^2]+\mathbb{E}_{x,y}[(\overline{y} - y)^2] + 2\overbrace{\mathbb{E}_{x}[\mathbb{E}_{y|x}}^{=\mathbb{E}_{x,y}}[(\overline{h} -\overline{y})]\underbrace{\mathbb{E}_{y|x}[(\overline{y} - y)}_{\substack{\mathbb{E}_{y|x}[y(x)]=\overline{y},\\\mathbb{E}_{y|x}[\overline{y}-y(x)]=0}}],\\
     &=\underbrace{\mathbb{E}_{\mathcal{Z},x}[(h_\mathcal{Z}(x) - \overline{h}(x))^2]}_\text{variance} + \underbrace{\mathbb{E}_{x,y}[(\overline{h}(x) -\overline{y}(x))^2]}_\text{bias$^2$} + \underbrace{\mathbb{E}_{x,y}[(\overline{y}(x) - y(x))^2]}_\text{noise$^2$}.
 \end{align}
+
+\begin{spexample}[Bias-variance parts]
 We have now achieved the decomposition, and see that the test-error is composed of three parts:
-\begin{itemize}\itemsep0em
-    \item[\textbf{Variance:}] Captures how much the classifier changes if you train on a different training set. How ``over-specialized'' is the classifier to a particular training set (overfitting)? If we have the best possible model for our training data, how far off are we from the average classifier? 
+    \begin{itemize}\itemsep0em
+    \item \textbf{Variance:} Captures how much the classifier changes if you train on a different training set. How ``over-specialized'' is the classifier to a particular training set (overfitting)? If we have the best possible model for our training data, how far off are we from the average classifier? 
 
-    \item[\textbf{Bias:}] What is the inherent error that you obtain from the classifier even with infinite training data? This is due to the classifier being ``biased'' to a particular kind of solution (e.g. a linear classifier, when the actual data is quadratic, has a large bias!). In other words, bias is inherent to the model assumption, and leads to underfitting.
+    \item \textbf{Bias:} What is the inherent error that you obtain from the classifier even with infinite training data? This is due to the classifier being ``biased'' to a particular kind of solution (e.g. a linear classifier, when the actual data is quadratic, has a large bias!). In other words, bias is inherent to the model assumption, and leads to underfitting.
 
-    \item[\textbf{Noise:}] How big is the data-intrinsic noise? This error measures ambiguity due to the data distribution and feature representation. You can not beat this, it is an aspect of the data. However, finding a better feature representation can improve upon this result!!!
+    \item \textbf{Noise:} How big is the data-intrinsic noise? This error measures ambiguity due to the data distribution and feature representation. You can not beat this, it is an aspect of the data. However, finding a better feature representation can improve upon this result!!!
 \end{itemize}
+\end{spexample}
 
-An unbiased estimator is thus given by $\mathbb{E}_{\mathcal{Z}}[h_\mathcal{Z}(x)]-\mathbb{E}_{y|x}[Y(x)]=0$. (IS THAT CORRECT???)
-
-From the perspective of the derived decomposition, we have thus quantified underfitting and overfitting a bit better. In general, the goal is thus to minimize both the variance and bias simultaneously, but in practice the trade-off with each other. That is, increasing the number of allowed models reduces the bias but increases the variance and vice versa!
-
+\subsection{Rao-Cramer lower bound}
+We can show that for an unbiased estimator $\mathbb{E}[\theta]=\hat{\theta}$ (i.e., the expected estimator is the true one!), the variance actually has a lower bound. You wouldn't quickly be asked to derive this on an exam, but it's interesting and important to know that there are exact limits to our knowledge.
 \begin{spexample}[Rao-Cramer (variance) lower bound]
-    I can't imagine we're asked to derive the Rao-Cramer lower-bound on the exam. But, it is possible to derive that for an \textbf{unbiased} estimator $\hat{\theta}$ the variance is:
+    That variance for an unbiased estimator is:
     \begin{equation}
         \mathbb{V}[\hat{\theta}] \geq \frac{1}{\mathbb{E}\left[\left(\frac{\partial \log\mathbb{P}(x|\theta)}{\partial\theta}\right)^2\right]} \stackrel{\text{generally}}{=} -\frac{1}{\mathbb{E}\left[ \frac{\partial^2\log \mathbb{P}(x|\theta)}{\partial\theta^2}   \right]},
     \end{equation}
     where the right-hand sides are the inverse Fisher information $I^{-1}$. For a `peaky' distribution with one clear optimal $\hat{\theta}$, the average derivative $\mathbb{E}[\mathbb{P}']$ is large, and, hence, the right-hand side is small. Thus, a focused pdf gives a small lower bound. But it cannot be any smaller than that! See also: \url{https://www.youtube.com/watch?v=i0JiSddCXMM}.
 \end{spexample}
+
+\begin{testexample}[Rao-Cramer bound for Gaussians]
+    Say we are given an unbiased estimator of the mean $\mu$ of a Gaussian. What is the Rao-Cramer lower bound based on $N$ i.i.d. drawn samples from a distribution $\mathcal{N}(x|\mu,\sigma^2)$? Well:
+    \begin{align}
+        \mathbb{V}[\hat{\mu}] & \geq -\frac{1}{\mathbb{E}\left[ \frac{\partial^2\log \mathcal{N}(x_1,\dots,x_n|\mu)}{\partial\mu^2}   \right]} \stackrel{\text{i.i.d.}}{=}-\sum_{i=1}^N\frac{1}{\mathbb{E}\left[ \frac{\partial^2\log \mathcal{N}(x_i|\mu)}{\partial\mu^2}   \right]} = \sum_{i=1}^N\frac{1}{\mathbb{E}\left[ \frac{\partial^2 \frac{(x_i-\mu)^2}{2\sigma^2}}{\partial\mu^2}   \right]} = \frac{\sigma^2}{N}.
+    \end{align}
+    Thus, the variance of finding the true $\mu$ is at least $N/\sigma^2$. Thus, the smaller the spread in the original samples, or the greater number of draws, the smaller our error in estimating of $\mu$ will be. This makes a lot of intuitive sense! If you draw one sample, you expect to be off $\mu$ by exactly $\sigma^2$, which is exactly what $\mathcal{N}(x|\mu,\sigma^2)$ means to begin with!
+\end{testexample}
 
 \subsection{Regularization \& Model selection}
 Data-based complexity measures: cross-validation, bootstrap, jackknife: data-driven. Model-based complexity measures: Neyman Pearson test, AIC, BIC.
